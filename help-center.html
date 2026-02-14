@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Help Center – High Table</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="pages.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- HEADER -->
+<header class="header">
+    <!-- LEFT -->
+    <div class="left">
+        <button class="icon-btn burger" id="menuBtn">☰</button>
+    </div>
+
+    <!-- CENTER LOGO -->
+    <div class="logo">
+        <span class="logo-icon">♛</span>
+        <span class="logo-text">
+            <strong>HIGH</strong><span>TABLE</span>
+        </span>
+    </div>
+
+    <!-- RIGHT (DESKTOP ACTIONS) -->
+    <div class="right desktop-nav">
+        <button class="icon-btn">🔔</button>
+        <button class="icon-btn" onclick="location.reload()">🔄</button>
+        <button class="icon-btn" id="searchBtn">🔍</button>
+
+        <select id="countrySelect">
+            <option value="IN">🇮🇳 India</option>
+            <option value="US">🇺🇸 USA</option>
+            <option value="UK">🇬🇧 UK</option>
+            <option value="JP">🇯🇵 Japan</option>
+            <option value="FR">🇫🇷 France</option>
+        </select>
+
+        <button class="auth-btn blink" id="loginBtn">Login</button>
+        <button class="auth-btn blink" id="registerBtn">Register</button>
+
+        <button class="auth-btn hidden" id="walletBtn" onclick="openWallet()">Wallet</button>
+        <button class="auth-btn hidden" id="historyBtn">History</button>
+        <button class="auth-btn hidden" id="logoutBtn">Logout</button>
+    </div>
+</header>
+
+<!-- MOBILE SLIDE MENU -->
+<div class="mobile-menu hidden" id="mobileMenu">
+    <button class="close-menu" id="closeMenu">✕</button>
+
+    <a href="#" id="mLogin">Login</a>
+    <a href="#" id="mRegister">Register</a>
+    <a href="#" id="mWallet">Wallet</a>
+    <a href="#" id="mHistory">History</a>
+    <a href="#" id="mLogout">Logout</a>
+
+    <div class="menu-group">
+        <a href="help-center.html">Help Center</a>
+        <a href="responsible-gaming.html">Responsible Gaming</a>
+        <a href="self-exclusion.html">Self Exclusion</a>
+    </div>
+
+    <div class="menu-group">
+        <p>About Us</p>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+    </div>
+
+    <div class="menu-group">
+        <p>Payment Info</p>
+        <a href="deposit-withdrawal.html">Deposit & Withdrawals</a>
+        <a href="currency-guide.html">Currency Guide</a>
+    </div>
+</div>
+
+<body>
+
+    <div class="page-wrapper">
+        <h2>Help Center</h2>
+
+        <p>
+            Welcome to the High Table Help Center. Here you can find answers to common
+            questions and guidance on using our platform smoothly.
+        </p>
+
+        <h3>Account & Access</h3>
+        <ul>
+            <li>How to create an account</li>
+            <li>Updating profile information</li>
+            <li>Resetting your password</li>
+        </ul>
+
+        <h3>Wallet & Transactions</h3>
+        <ul>
+            <li>Adding funds to your wallet</li>
+            <li>Requesting withdrawals</li>
+            <li>Understanding wallet history</li>
+        </ul>
+
+        <h3>Security & Privacy</h3>
+        <ul>
+            <li>Keeping your account secure</li>
+            <li>Protecting personal information</li>
+            <li>Recognizing suspicious activity</li>
+        </ul>
+
+        <div class="info-box">
+            If you need further assistance, please contact our support team through
+            the official channels listed on the platform.
+        </div>
+
+        <div class="back-home">
+            <a href="index.html">← Back to High Table</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,850 @@
+:root {
+    --bg-main: #0a0f0d;
+    --card-bg: #111817;
+    --primary: #00ff9c;
+    --primary-glow: rgba(0, 255, 156, 0.6);
+    --text-main: #ffffff;
+    --text-muted: #9ca3af;
+    --primary-color: #00ff9c;
+    --secondary-color: #00ffff;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at top, #0d1312, #070b0a);
+    color: var(--text-main);
+}
+
+/* FIXED */
+.hidden {
+    display: none !important;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    
+    align-items: center;
+    padding: 10px;
+    background: #161616;
+    border-bottom: 1px solid #00ffff;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-container h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    letter-spacing: 1px;
+}
+
+.logo-icon {
+    font-size: 26px;
+    color: gold;
+    text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+}
+
+.logo-text {
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+.logo-text strong {
+    color: #fff;
+}
+
+.logo-text span {
+    color: gold;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    margin: 0 4px;
+    cursor: pointer;
+}
+
+.auth-btn {
+    background: #00ffff;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+select {
+    background: #111;
+    color: #fff;
+    border: 1px solid #00ffff;
+    margin-left: 5px;
+}
+
+/* MODALS */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: none;
+    /* IMPORTANT */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+    /* ONLY active modal shows */
+}
+
+.modal-box {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 420px;
+    max-height: 90vh;
+    /* 🔑 key */
+    overflow-y: auto;
+    /* 🔑 key */
+    z-index: 1001;
+}
+
+.modal-box input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+}
+
+.modal-box button {
+    width: 100%;
+    padding: 8px;
+    background: #fb4646;
+    border: none;
+    cursor: pointer;
+}
+
+.modal-box p {
+    text-align: center;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* DESKTOP */
+@media (min-width: 768px) {
+    .logo {
+        font-size: 22px;
+    }
+}
+
+/* SPORTS BAR */
+.sports-bar {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+    gap: 10px;
+    background: #111;
+}
+
+.sport {
+    padding: 8px 14px;
+    background: #1e1e1e;
+    border-radius: 20px;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-weight: 500;
+}
+
+.sport.active {
+    border-color: #00ffff;
+    color: #00ffff;
+    box-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* TABS */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px;
+}
+
+.tab {
+    flex: 1;
+    margin: 0 4px;
+    padding: 8px;
+    background: #1e1e1e;
+    border: 1px solid #222;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: 0.3s ease;
+}
+
+.tab.active {
+    background: var(--primary);
+    color: #000;
+    font-weight: 700;
+}
+
+/* MATCH CARDS */
+.match-list {
+    padding: 10px;
+}
+
+.match-card {
+    background: linear-gradient(160deg, #101615, #0c1211);
+    border: 1px solid rgba(0, 255, 156, 0.15);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 14px;
+    pointer-events: relative;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.match-card * {
+    pointer-events: none;
+}
+
+.match-card .vs {
+    font-weight: 800;
+    opacity: 0.8;
+}
+
+.match-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 25px rgba(0, 255, 156, 0.4);
+    border-color: #00ff9c;
+}
+
+.match-card:active {
+    transform: scale(0.98);
+}
+
+.match-title {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.match-teams {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+}
+
+.match-status {
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #00ffff;
+}
+
+.match-body {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.teams-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.team-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+}
+
+.team {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.team-logo {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    color: #ffcc00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 6px;
+    box-shadow: 0 0 8px rgba(0, 255, 156, 0.3);
+    object-fit: contain;
+    margin-bottom: 6px;
+}
+
+.vs {
+    font-weight: 800;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.match-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 8px;
+    color: #ccc;
+}
+
+.timer.live {
+    color: #ff5252;
+    font-weight: 700;
+    animation: livePulse 1.5s infinite;
+}
+
+.timer.upcoming {
+    color: #00ffff;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.match-card.closed {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(0.7);
+}
+
+.bet-teams {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* BUTTON FEEDBACK */
+button:active {
+    transform: scale(0.97);
+}
+
+.bet-teams button {
+    flex: 1;
+    padding: 10px;
+    background: #1e1e1e;
+    border: 1px solid #00ffff;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.bet-teams button.active {
+    background: #00ffff;
+    color: #000;
+}
+
+#betInfo {
+    font-size: 13px;
+    margin: 8px 0;
+    color: #ccc;
+}
+
+.bet-box {
+    max-width: 380px;
+}
+
+.bet-team-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 12px 0;
+}
+
+.bet-team {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.bet-team.active {
+    border-color: #00ffff;
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.bet-team img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.bet-team p {
+    margin: 6px 0 2px;
+    font-size: 14px;
+}
+
+.odds {
+    font-size: 12px;
+    color: #00ffff;
+}
+
+.bet-summary {
+    background: #121212;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.bet-summary span {
+    color: #00ffff;
+}
+
+.cancel {
+    background: #333 !important;
+    margin-top: 6px;
+}
+
+.search-input {
+    width: 95%;
+    margin: 10px auto;
+    display: block;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #00ffff;
+    background: #111;
+    color: #fff;
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+    }
+
+    100% {
+        box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+    }
+}
+
+.blink {
+    animation: pulseGlow 1.8s infinite;
+}
+
+.ticker {
+    width: 100%;
+    overflow: hidden;
+    background: #0f0f0f;
+    border-top: 1px solid #00ffff;
+    border-bottom: 1px solid #00ffff;
+}
+
+.ticker-content {
+    display: inline-block;
+    white-space: nowrap;
+    padding: 8px 0;
+    font-size: 13px;
+    color: #00ffff;
+    animation: scrollTicker 20s linear infinite;
+}
+
+@keyframes scrollTicker {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.match-card.live {
+    border-color: #00ff9c;
+    box-shadow: 0 0 20px var(--primary-glow);
+    animation: pulseGlow 2s infinite;
+}
+
+.wallet-box {
+    max-width: 720px;
+}
+
+.balance-text {
+    color: #00ffff;
+    margin-bottom: 20px;
+}
+
+.wallet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+@media (min-width: 600px) {
+    .wallet-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.wallet-card {
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.wallet-card h3 {
+    color: gold;
+    margin-bottom: 10px;
+}
+
+.wallet-card input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+}
+
+.wallet-card button {
+    width: 100%;
+    background: #ff4d6d;
+    border: none;
+    padding: 10px;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bank-title {
+    color: #f8f8f8;
+    margin-top: 20px;
+}
+
+.not-linked {
+    color: red;
+}
+
+.bank-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.bank-actions button {
+    flex: 1;
+    background: #f9284f;
+    border: none;
+    padding: 10px;
+    color: #fff;
+    border-radius: 6px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.close-btn {
+    margin-top: 15px;
+    width: 100%;
+    background: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+.wallet-box h2 {
+    text-align: center;
+    color: #00ffff;
+    margin-bottom: 10px;
+}
+
+.wallet-box hr {
+    border: none;
+    border-top: 1px solid #333;
+    margin: 20px 0;
+}
+
+.wallet-box input {
+    width: 100%;
+    margin-bottom: 12px;
+    background: #fff;
+    color: #000;
+}
+
+.wallet-box small {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #aaa;
+}
+
+#bankStatus {
+    font-weight: bold;
+}
+
+#bankStatus.not-linked {
+    color: #ff4d4d;
+}
+
+#bankStatus.linked {
+    color: #00ff99;
+}
+
+.wallet-card button:hover,
+.bank-actions button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 10px rgba(255, 77, 109, 0.6);
+}
+
+.modal-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-box::-webkit-scrollbar-thumb {
+    background: #00ffff;
+    border-radius: 10px;
+}
+
+.modal-box::-webkit-scrollbar-track {
+    background: #111;
+}
+
+.history-box {
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.history-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.history-tabs button {
+    flex: 1;
+    padding: 10px;
+    background: #222;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.history-tabs button.active {
+    background: #00f7ff;
+    color: #000;
+}
+
+.history-list {
+    font-size: 14px;
+}
+
+.history-item {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+}
+
+/* LOGO IMAGE */
+.logo-img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+
+/* NAV */
+.nav a {
+    margin: 0 8px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* BURGER */
+.burger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 26px;
+    color: #00ffff;
+}
+
+/* MOBILE MENU */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 85%;
+    height: 100%;
+    background: #0f0f0f;
+    padding: 20px;
+    z-index: 2000;
+    overflow-y: auto;
+}
+
+.mobile-menu a {
+    display: block;
+    padding: 12px 0;
+    font-size: 16px;
+    color: #00ffff;
+    text-decoration: none;
+}
+
+.menu-group {
+    margin-top: 20px;
+}
+
+.menu-group p {
+    color: gold;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.close-menu {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    float: right;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .desktop-nav {
+        display: none;
+    }
+
+    .burger {
+        display: block;
+    }
+}
+
+/* ================= FOOTER ================= */
+
+.site-footer {
+    background: #0b0b0b;
+    border-top: 1px solid #222;
+    padding: 40px 20px 20px;
+    color: #ccc;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 30px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.footer-logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffcc00;
+    margin-bottom: 10px;
+}
+
+.footer-logo span {
+    margin-left: 6px;
+}
+
+.footer-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #aaa;
+}
+
+.footer-column h4 {
+    color: #ffcc00;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.footer-column a {
+    display: block;
+    color: #bbb;
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: color 0.2s ease;
+}
+
+.footer-column a:hover {
+    color: #fff;
+}
+
+.footer-bottom {
+    margin-top: 30px;
+    border-top: 1px solid #222;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 13px;
+    color: #777;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 900px) {
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-column {
+        margin-top: 20px;
+    }
+
+    .footer-brand {
+        margin: auto;
+    }
+}
+
+.user-id {
+    color: #ffcc00;
+    font-size: 13px;
+    margin-right: 10px;
+    opacity: 0.9;
+}

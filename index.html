@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>High Teble</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <!-- LEFT -->
+        <div class="left">
+            <button class="icon-btn burger" id="menuBtn">☰</button>
+        </div>
+
+        <!-- CENTER LOGO -->
+        <div class="logo">
+            <span class="logo-icon">👑</span>
+            <span class="logo-text">
+                <strong>HIGH</strong><span>TABLE</span>
+            </span>
+        </div>
+
+        <!-- RIGHT (DESKTOP ACTIONS) -->
+        <div class="right desktop-nav">
+            <button class="icon-btn">🔔</button>
+            <button class="icon-btn" onclick="location.reload()">🔄</button>
+            <button class="icon-btn" id="searchBtn">🔍</button>
+
+            <select id="countrySelect">
+                <option value="IN">🇮🇳 India</option>
+                <option value="US">🇺🇸 USA</option>
+                <option value="UK">🇬🇧 UK</option>
+                <option value="JP">🇯🇵 Japan</option>
+                <option value="FR">🇫🇷 France</option>
+            </select>
+
+            <button class="auth-btn blink" id="loginBtn">Login</button>
+            <button class="auth-btn blink" id="registerBtn">Register</button>
+
+            <button class="auth-btn hidden" id="walletBtn" onclick="openWallet()">Wallet</button>
+            <span id="userIdLabel" class="user-id hidden">
+                ID: <strong id="userIdText"></strong>
+            </span>
+            <button class="auth-btn hidden" id="historyBtn">History</button>
+            <button class="auth-btn hidden" id="logoutBtn">Logout</button>
+        </div>
+    </header>
+
+    <!-- MOBILE SLIDE MENU -->
+    <div class="mobile-menu hidden" id="mobileMenu">
+        <button class="close-menu" id="closeMenu">✕</button>
+
+        <a href="#" id="mLogin">Login</a>
+        <a href="#" id="mRegister">Register</a>
+        <a href="#" id="mWallet">Wallet</a>
+        <a href="#" id="mHistory">History</a>
+        <a href="#" id="mLogout">Logout</a>
+
+        <div class="menu-group">
+            <a href="help-center.html">Help Center</a>
+            <a href="responsible-gaming.html">Responsible Gaming</a>
+            <a href="self-exclusion.html">Self Exclusion</a>
+        </div>
+
+        <div class="menu-group">
+            <p>About Us</p>
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+        </div>
+
+        <div class="menu-group">
+            <p>Payment Info</p>
+            <a href="deposit-withdrawal.html">Deposit & Withdrawals</a>
+            <a href="currency-guide.html">Currency Guide</a>
+        </div>
+    </div>
+
+    <!-- TICKER -->
+    <div class="ticker">
+        <div class="ticker-content" id="tickerContent">
+            🔥 Show your skills & earn money • 🎯 play smart, play safe • Your New Place to Know your Skill
+        </div>
+    </div>
+
+    <!-- SPORTS -->
+    <div class="sports-bar">
+        <div class="sport active" data-sport="cricket">🏏 Cricket</div>
+        <div class="sport" data-sport="football">⚽ Football</div>
+        <div class="sport" data-sport="mma">🥊 MMA</div>
+        <div class="sport" data-sport="basketball">🏀 Basketball</div>
+    </div>
+
+    <input type="text" id="searchInput" placeholder="Search team or league..." class="search-input hidden" />
+
+    <!-- FILTERS -->
+    <div class="tabs">
+        <button class="tab" data-filter="upcoming">Upcoming</button>
+        <button class="tab active" data-filter="all">All</button>
+        <button class="tab" data-filter="live">Live</button>
+    </div>
+
+    <!-- MATCH LIST -->
+    <div id="matchList" class="match-list"></div>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal" id="loginModal">
+        <div class="modal-box">
+            <h2>Login</h2>
+            <input id="loginUser" placeholder="Username">
+            <input id="loginPass" type="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <p onclick="closeModal('loginModal')">Close</p>
+            <p style="margin-top:10px;font-size:13px;">
+                <span class="link" onclick="openModal('forgotModal')">Forgot Password?</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- REGISTER MODAL -->
+    <div id="registerModal" class="modal">
+        <div class="modal-box">
+            <h3>Create Account</h3>
+
+            <input type="text" id="regUser" placeholder="Username" required />
+
+            <input type="email" id="regEmail" placeholder="Email Address" required />
+
+            <input type="tel" id="regMobile" placeholder="Mobile Number" required />
+
+            <input type="password" id="regPass" placeholder="Password" required />
+
+            <input type="password" id="regPass2" placeholder="Confirm Password" required />
+
+            <button onclick="register()">Register</button>
+
+            <p style="margin-top:10px;font-size:13px;">
+                Already have an account?
+                <span class="link" onclick="openModal('loginModal')">Login</span>
+            </p>
+            <p onclick="closeModal('registerModal')">Close</p>
+        </div>
+    </div>
+
+    <div id="forgotModal" class="modal">
+        <div class="modal-box">
+            <h3>Forgot Password</h3>
+
+            <input type="email" id="forgotEmail" placeholder="Registered Email" required />
+
+            <button onclick="requestPasswordReset()">Send Reset Link</button>
+
+            <p style="margin-top:10px;font-size:13px;">
+                Remember password?
+                <span class="link" onclick="openModal('loginModal')">Login</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- WALLET MANAGEMENT MODAL -->
+    <div class="modal" id="walletModal">
+        <div class="modal-box wallet-box">
+
+            <h2>🏦 Wallet Management</h2>
+            <p class="balance-text">
+                Current Balance: <span id="tokenBalance">0</span> TOKENS
+            </p>
+
+            <div class="wallet-user-id">
+                Your User ID: <strong id="walletUserId"></strong>
+            </div>
+
+            <div class="wallet-grid">
+
+                <!-- BUY TOKENS -->
+                <div class="wallet-card">
+                    <h3>Add Money (Buy Tokens)</h3>
+                    <input type="number" id="add-amount" placeholder="Minimum 100" />
+                    <button type="button" onclick="buyTokens(event)">Buy Tokens</button>
+                </div>
+
+                <!-- WITHDRAW -->
+                <div class="wallet-card">
+                    <h3>Convert Tokens to Money</h3>
+                    <input id="withdrawAmount" type="number" placeholder="Min 500">
+                    <input id="withdrawPassword" type="password" placeholder="Login Password">
+                    <button onclick="withdrawTokens()">Convert & Withdraw</button>
+                    <small>Max 3 withdrawals / 24 hours<br>Processing up to 24h</small>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <!-- BANK DETAILS -->
+            <h3 class="bank-title">Bank Account Details</h3>
+            <p>Status: <span id="bankStatus" class="not-linked">Not Linked</span></p>
+
+            <input id="accHolder" placeholder="Account Holder Name">
+            <input id="accNumber" placeholder="Account Number">
+            <input id="bankName" placeholder="Bank Name">
+            <input id="bankMobile" placeholder="Mobile Number">
+            <input id="bankEmail" placeholder="Email ID">
+            <input id="bankCode" placeholder="IFSC / SWIFT Code">
+
+            <div class="bank-actions">
+                <button onclick="saveBank()">Link Bank Account</button>
+                <button onclick="saveBank()">Update Bank Details</button>
+            </div>
+
+            <button class="close-btn" onclick="closeModal('walletModal')">Close</button>
+
+        </div>
+    </div>
+
+    <!-- BET MODAL -->
+    <div class="modal" id="BetModal">
+        <div class="modal-box bet-box">
+            <h3 id="betMatchTitle"></h3>
+
+            <div class="bet-team-row">
+                <div class="bet-team" id="teamABox">
+                    <p id="teamAName"></p>
+                    <span class="odds">2.00x</span>
+                </div>
+
+                <div class="vs">VS</div>
+
+                <div class="bet-team" id="teamBBox">
+                    <p id="teamBName"></p>
+                    <span class="odds">2.00x</span>
+                </div>
+            </div>
+
+            <input id="betAmount" type="number" placeholder="Min bet ₹20" min="20" />
+
+            <div class="bet-summary">
+                <p>Main Bet (75%): ₹<span id="mainBetText">0</span></p>
+                <p>Auto Hedge (25%): ₹<span id="hedgeBetText">0</span></p>
+                <p>Win if Selected Team Wins: ₹<span id="potentialWinText">0</span></p>
+                <p>Win if Selected Team Loses: ₹<span id="hedgeReturnText">0</span></p>
+            </div>
+
+            <button id="placeBetBtn" class="blink">Place Bet</button>
+            <button class="cancel" onclick="closeModal('BetModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- HISTORY MODAL -->
+    <div class="modal" id="historyModal">
+        <div class="modal-box history-box">
+
+            <h2>📜 History</h2>
+
+            <div class="history-tabs">
+                <button id="walletHistoryTab" class="active">Wallet</button>
+                <button id="betHistoryTab">Bets</button>
+            </div>
+
+            <div id="historyContent"></div>
+
+            <div id="walletHistory" class="history-list"></div>
+            <div id="betHistory" class="history-list hidden"></div>
+
+            <button class="close-btn" onclick="closeModal('historyModal')">Close</button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+
+        <!-- Brand -->
+        <div class="footer-brand">
+            <div class="logo">
+                <span class="logo-icon">👑</span>
+                <span class="logo-text">
+                    <strong>HIGH</strong><span>TABLE</span>
+                </span>
+            </div>
+            <p class="footer-desc">
+                High Table is a skill-based digital platform designed for entertainment, fair play, and responsible use.
+            </p>
+        </div>
+
+        <div class="footer-container">
+            <!-- Support -->
+            <div class="footer-column">
+                <h4>Support</h4>
+                <a href="help-center.html">Help Center</a>
+                <a href="responsible-gaming.html">Responsible Use</a>
+                <a href="self-exclusion.html">Self Exclusion</a>
+            </div>
+
+            <!-- About -->
+            <div class="footer-column">
+                <h4>About Us</h4>
+                <a href="privacy-policy.html">Privacy Policy</a>
+                <a href="terms-of-service.html">Terms of Service</a>
+            </div>
+
+            <!-- Payment -->
+            <div class="footer-column">
+                <h4>Payment Info</h4>
+                <a href="deposit-withdrawal.html">Deposit & Withdrawals</a>
+                <a href="currency-guide.html">Currency Guide</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 High Table. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

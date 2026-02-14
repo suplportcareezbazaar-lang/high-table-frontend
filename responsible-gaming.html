@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Responsible Use – High Table</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="pages.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- HEADER -->
+<header class="header">
+    <!-- LEFT -->
+    <div class="left">
+        <button class="icon-btn burger" id="menuBtn">☰</button>
+    </div>
+
+    <!-- CENTER LOGO -->
+    <div class="logo">
+        <span class="logo-icon">♛</span>
+        <span class="logo-text">
+            <strong>HIGH</strong><span>TABLE</span>
+        </span>
+    </div>
+
+    <!-- RIGHT (DESKTOP ACTIONS) -->
+    <div class="right desktop-nav">
+        <button class="icon-btn">🔔</button>
+        <button class="icon-btn" onclick="location.reload()">🔄</button>
+        <button class="icon-btn" id="searchBtn">🔍</button>
+
+        <select id="countrySelect">
+            <option value="IN">🇮🇳 India</option>
+            <option value="US">🇺🇸 USA</option>
+            <option value="UK">🇬🇧 UK</option>
+            <option value="JP">🇯🇵 Japan</option>
+            <option value="FR">🇫🇷 France</option>
+        </select>
+
+        <button class="auth-btn blink" id="loginBtn">Login</button>
+        <button class="auth-btn blink" id="registerBtn">Register</button>
+
+        <button class="auth-btn hidden" id="walletBtn" onclick="openWallet()">Wallet</button>
+        <button class="auth-btn hidden" id="historyBtn">History</button>
+        <button class="auth-btn hidden" id="logoutBtn">Logout</button>
+    </div>
+</header>
+
+<!-- MOBILE SLIDE MENU -->
+<div class="mobile-menu hidden" id="mobileMenu">
+    <button class="close-menu" id="closeMenu">✕</button>
+
+    <a href="#" id="mLogin">Login</a>
+    <a href="#" id="mRegister">Register</a>
+    <a href="#" id="mWallet">Wallet</a>
+    <a href="#" id="mHistory">History</a>
+    <a href="#" id="mLogout">Logout</a>
+
+    <div class="menu-group">
+        <a href="help-center.html">Help Center</a>
+        <a href="responsible-gaming.html">Responsible Gaming</a>
+        <a href="self-exclusion.html">Self Exclusion</a>
+    </div>
+
+    <div class="menu-group">
+        <p>About Us</p>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+    </div>
+
+    <div class="menu-group">
+        <p>Payment Info</p>
+        <a href="deposit-withdrawal.html">Deposit & Withdrawals</a>
+        <a href="currency-guide.html">Currency Guide</a>
+    </div>
+</div>
+
+<body>
+
+    <div class="page-wrapper">
+
+        <h2>Responsible Use</h2>
+
+        <p>
+            High Table is committed to promoting a safe, balanced, and responsible
+            digital experience. Our platform is designed for entertainment purposes
+            only and should be used mindfully.
+        </p>
+
+        <div class="info-box">
+            Please ensure that your participation on High Table remains within
+            personal, financial, and time limits that are comfortable for you.
+        </div>
+
+        <h3>Guidelines for Responsible Use</h3>
+        <ul>
+            <li>Use the platform only for leisure and entertainment</li>
+            <li>Set personal limits on time and spending</li>
+            <li>Take regular breaks during usage</li>
+            <li>Avoid impulsive or emotional decisions</li>
+            <li>Never use essential or borrowed funds</li>
+        </ul>
+
+        <h3>Know When to Pause</h3>
+        <p>
+            If you feel that your activity is becoming difficult to manage, it is
+            important to pause and reassess your usage. Taking a break can help
+            restore balance and clarity.
+        </p>
+
+        <p>
+            High Table supports informed and responsible decision-making at all times.
+            Assistance options are available for users who wish to limit or suspend
+            their access.
+        </p>
+
+        <div class="back-home">
+            <a href="index.html">← Back to High Table</a>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

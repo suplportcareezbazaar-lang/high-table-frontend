@@ -1,0 +1,88 @@
+/* ===== GLOBAL PAGE STYLES ===== */
+body {
+    margin: 0;
+    font-family: "Poppins", Arial, sans-serif;
+    background: #0b0b0b;
+    color: #eaeaea;
+}
+
+.page-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+}
+
+.page-wrapper h2 {
+    font-size: 28px;
+    color: #ffcc00;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #222;
+    padding-bottom: 10px;
+}
+
+.page-wrapper h3 {
+    font-size: 18px;
+    margin-top: 30px;
+    color: #ffffff;
+}
+
+.page-wrapper p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #cfcfcf;
+    margin: 12px 0;
+}
+
+.page-wrapper ul {
+    margin: 15px 0 20px 20px;
+    padding: 0;
+}
+
+.page-wrapper ul li {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #dddddd;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===== INFO BOX ===== */
+.info-box {
+    background: #141414;
+    border-left: 4px solid #ffcc00;
+    padding: 15px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #e6e6e6;
+}
+
+/* ===== FOOTER LINK BACK ===== */
+.back-home {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.back-home a {
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-home a:hover {
+    text-decoration: underline;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+    .page-wrapper {
+        padding: 25px 15px 60px;
+    }
+
+    .page-wrapper h2 {
+        font-size: 22px;
+    }
+}
