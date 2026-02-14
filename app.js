@@ -1,5 +1,5 @@
 /* ================== CONFIG ================== */
-const API_BASE = https://high-table-backend.onrender.com;
+const API_BASE = "https://high-table-backend.onrender.com";
 const API = API_BASE + "/api";
 
 /* ================== DOM ================== */
