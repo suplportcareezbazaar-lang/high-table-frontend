@@ -1,5 +1,5 @@
 /* ================== CONFIG ================== */
-const API_BASE = "http://localhost:3000";
+const API_BASE = https://high-table-backend.onrender.com;
 const API = API_BASE + "/api";
 
 /* ================== DOM ================== */
