@@ -476,20 +476,20 @@ function renderMatches() {
     const list = document.getElementById("matchList");
     list.innerHTML = "";
 
-    const now = new Date();
-    const next24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    if (!Array.isArray(matches) || !matches.length) {
+        list.innerHTML = `<div class="no-data">No matches available</div>`;
+        return;
+    }
 
     const filtered = matches
-        .filter(m => m.sport === currentSport)
+        .filter(m => m.sport?.toLowerCase() === currentSport.toLowerCase())
         .filter(m => {
             if (currentFilter === "live") {
                 return m.status === "live";
             }
-
             if (currentFilter === "upcoming") {
                 return m.status === "upcoming";
             }
-
             return true;
         });
 
@@ -499,8 +499,11 @@ function renderMatches() {
     }
 
     filtered.forEach(match => {
-        const isLive = new Date(match.startTime) <= new Date();
-        const timerText = isLive ? "LIVE" : getCountdown(match.startTime);
+
+        const isLive = match.status === "live";
+        const timerText = isLive
+            ? "LIVE"
+            : getCountdown(match.startTime);
 
         const card = document.createElement("div");
         card.className = "match-card";
@@ -509,12 +512,11 @@ function renderMatches() {
             card.classList.add("closed");
         }
 
-        // 🔥 attach match object directly
         card.matchData = match;
 
         card.innerHTML = `
             <div class="match-header">
-                <span class="league">${match.league}</span>
+                <span class="league">${match.league || "Match"}</span>
                 <span class="timer ${isLive ? "live" : "upcoming"}">
                     ${timerText}
                 </span>
@@ -535,18 +537,14 @@ function renderMatches() {
             </div>
 
             <div class="match-time">
-                <span class="timer">${getCountdown(match.startTime)}</span>
+                ${formatMatchTime(match.startTime)}
             </div>
         `;
 
-        card.onclick = () => {
-            //console.log("🖱️ Match clicked:", match.team1, "vs", match.team2);
-            openBetModal(match);
-        };
+        card.onclick = () => openBetModal(match);
 
         list.appendChild(card);
     });
-
 }
 
 /* ================== BET POPUP ================== */
