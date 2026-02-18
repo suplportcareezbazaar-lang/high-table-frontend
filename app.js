@@ -464,6 +464,8 @@ async function loadMatches() {
         matches = data
             .filter(m => m.team1 && m.team2 && m.startTime)
             .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+
+        console.log("Loaded matches:", matches.length);
         renderMatches();
 
     } catch (err) {
