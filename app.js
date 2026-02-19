@@ -442,22 +442,15 @@ document.querySelectorAll(".tab").forEach(tab => {
 });
 
 /* ================== LOAD MATCHES ================== */
-async function loadMatches() {
+async function loadMatches(retry = 0) {
     showLoading();
+
     try {
-        //console.log("📡 Fetching matches from:", `${API}/matches`);
-
         const res = await fetch(`${API}/matches`);
-
-        if (!res.ok) {
-            showError("Server error. Please refresh.");
-            return;
-        }
-
         const data = await res.json();
 
         if (!Array.isArray(data)) {
-            console.error("❌ Invalid data format:", data);
+            showError("Invalid server response");
             return;
         }
 
@@ -465,12 +458,18 @@ async function loadMatches() {
             .filter(m => m.team1 && m.team2 && m.startTime)
             .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 
+        if (!matches.length && retry < 5) {
+            console.log("No matches yet, retrying...");
+            setTimeout(() => loadMatches(retry + 1), 2000);
+            return;
+        }
+
         console.log("Loaded matches:", matches.length);
         renderMatches();
 
     } catch (err) {
-        console.error("❌ FETCH FAILED:", err);
-        showError("Unable to load matches. Please try again.");
+        console.error("Fetch failed:", err);
+        showError("Unable to load matches.");
     }
 }
 
