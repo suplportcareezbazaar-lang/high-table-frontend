@@ -518,9 +518,7 @@ function renderMatches() {
         card.innerHTML = `
             <div class="match-header">
                 <span class="league">${match.league || "Match"}</span>
-                <span class="timer ${isLive ? "live" : "upcoming"}">
-                    ${timerText}
-                </span>
+                
             </div>
 
             <div class="match-body">
@@ -539,6 +537,9 @@ function renderMatches() {
 
             <div class="match-time">
                 ${formatMatchTime(match.startTime)}
+                <span class="timer ${isLive ? "live" : "upcoming"}">
+                    ${timerText}
+                </span>
             </div>
         `;
 
