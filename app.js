@@ -482,7 +482,18 @@ function renderMatches() {
         return;
     }
 
-    const filtered = matches
+    // ✅ Remove duplicates by match.id
+    const uniqueMatches = [];
+    const seenIds = new Set();
+
+    matches.forEach(m => {
+        if (m?.id && !seenIds.has(m.id)) {
+            seenIds.add(m.id);
+            uniqueMatches.push(m);
+        }
+    });
+
+    const filtered = uniqueMatches
         .filter(m => m.sport?.toLowerCase() === currentSport.toLowerCase())
         .filter(m => {
             if (currentFilter === "live") {
@@ -518,7 +529,6 @@ function renderMatches() {
         card.innerHTML = `
             <div class="match-header">
                 <span class="league">${match.league || "Match"}</span>
-                
             </div>
 
             <div class="match-body">
