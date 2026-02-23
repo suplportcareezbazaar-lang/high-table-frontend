@@ -790,7 +790,23 @@ setInterval(() => {
 
 /* ================== INIT ================== */
 document.addEventListener("DOMContentLoaded", () => {
+
     updateAuthUI();
     loadMatches();
-    setInterval(loadMatches, 60000); // refresh every 60s
+    setInterval(loadMatches, 60000);
+
+    // 🔥 Handle payment return safely
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get("payment") === "success") {
+
+        // Remove query from URL (so alert doesn't repeat)
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        alert("Payment completed successfully!");
+
+        // Open wallet & refresh balance
+        openModal("walletModal");
+        loadWallet();
+    }
 });
