@@ -726,7 +726,7 @@ async function loadWalletHistory() {
                     <td style="color:${h.amount < 0 ? 'red' : 'green'}">
                         ${h.amount}
                     </td>
-                    <td>${new Date(h.time).toLocaleString()}</td>
+                    <td>${h.createdAt ? new Date(h.createdAt).toLocaleString() : "-"}</td>
                 </tr>
             `).join("")}
         </table>
