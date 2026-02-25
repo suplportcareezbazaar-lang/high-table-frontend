@@ -248,6 +248,13 @@ function updateAuthUI() {
     walletBtn.classList.toggle("hidden", !token);
     historyBtn.classList.toggle("hidden", !token);
 
+    // MOBILE
+    document.getElementById("mLogin").classList.toggle("hidden", !!token);
+    document.getElementById("mRegister").classList.toggle("hidden", !!token);
+    document.getElementById("mLogout").classList.toggle("hidden", !token);
+    document.getElementById("mWallet").classList.toggle("hidden", !token);
+    document.getElementById("mHistory").classList.toggle("hidden", !token);
+
     const userIdLabel = document.getElementById("userIdLabel");
     const userIdText = document.getElementById("userIdText");
 
