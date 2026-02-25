@@ -692,6 +692,28 @@ button:active {
     border-bottom: 1px solid #333;
 }
 
+.history-box table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.history-box th {
+    background: #00ffff;
+    color: #000;
+    padding: 8px;
+}
+
+.history-box td {
+    padding: 8px;
+    border-bottom: 1px solid #333;
+    text-align: center;
+}
+
+.history-box tr:hover {
+    background: #1a2b2e;
+}
+
 /* LOGO IMAGE */
 .logo-img {
     width: 38px;
@@ -725,7 +747,7 @@ button:active {
     height: 100%;
     background: #0f0f0f;
     padding: 20px;
-    z-index: 2000;
+    z-index: 900;
     overflow-y: auto;
 }
 
