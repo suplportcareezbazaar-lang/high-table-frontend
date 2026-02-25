@@ -753,16 +753,28 @@ async function loadBetHistory() {
         <table>
             <tr>
                 <th>Match</th>
-                <th>Team</th>
+                <th>Your Team</th>
+                <th>Winner</th>
                 <th>Amount</th>
-                <th>Status</th>
+                <th>Result</th>
+                <th>Date</th>
             </tr>
             ${data.map(b => `
                 <tr>
-                    <td>${b.matchId}</td>
+                    <td>${b.matchName || b.matchId}</td>
                     <td>${b.selectedTeam}</td>
-                    <td>${b.mainBet + b.hedgeBet}</td>
-                    <td>${b.status}</td>
+                    <td>${b.winnerTeam || "-"}</td>
+                    <td>${b.amount}</td>
+                    <td style="color:
+                        ${b.result === "won" ? "lime" :
+                          b.result === "lost" ? "red" : "orange"}">
+                        ${b.result ? b.result.toUpperCase() : "PENDING"}
+                    </td>
+                    <td>
+                        ${b.settledAt
+                            ? new Date(b.settledAt).toLocaleString()
+                            : "-"}
+                    </td>
                 </tr>
             `).join("")}
         </table>
