@@ -1,19 +1,67 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Match Results - High Table</title>
-    <link rel="stylesheet" href="style.css">
-</head>
 
+    <style>
+        body {
+            background: #0f1b1f;
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            color: #00ffd0;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #16272c;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #00ffd0;
+            color: black;
+            padding: 12px;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #1f3a40;
+        }
+
+        tr:hover {
+            background: #1b353b;
+        }
+
+        .winner {
+            color: #00ff6a;
+            font-weight: bold;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #aaa;
+        }
+    </style>
+</head>
 <body>
 
-    <h2 style="text-align:center">🏆 Match Results</h2>
+<h2>🏆 Match Results</h2>
 
-    <div id="resultsContainer" style="padding:20px"></div>
+<div id="resultsContainer"></div>
 
-    <script src="results.js"></script>
+<script src="results.js"></script>
 
 </body>
-
 </html>
