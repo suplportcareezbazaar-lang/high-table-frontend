@@ -661,6 +661,7 @@ placeBetBtn.onclick = async () => {
             },
             body: JSON.stringify({
                 matchId: selectedMatch.id,
+                matchName: `${selectedMatch.team1} vs ${selectedMatch.team2}`,
                 team: selectedTeam === "A"
                     ? selectedMatch.team1
                     : selectedMatch.team2,
