@@ -296,6 +296,14 @@ select {
     margin-top: 10px;
 }
 
+.team-logo-img {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0,255,200,0.4);
+}
+
 .team-logo {
     width: 55px;
     height: 55px;
