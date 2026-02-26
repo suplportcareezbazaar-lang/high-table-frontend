@@ -815,6 +815,22 @@ document.addEventListener("DOMContentLoaded", () => {
     loadMatches();
     setInterval(loadMatches, 60000);
 
+    /* ===== SEARCH BUTTON LOGIC ===== */
+
+    const searchBtn = document.getElementById("searchBtn");
+    const searchInput = document.getElementById("searchInput");
+
+    searchBtn.onclick = () => {
+        searchInput.classList.toggle("hidden");
+        searchInput.focus();
+    };
+
+    searchInput.oninput = function () {
+        const keyword = this.value.toLowerCase();
+
+        renderMatchesFiltered(keyword);
+    };
+
     // 🔥 Handle payment return safely
     const urlParams = new URLSearchParams(window.location.search);
 
