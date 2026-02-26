@@ -566,6 +566,69 @@ function renderMatches() {
     });
 }
 
+function renderMatchesFiltered(keyword) {
+    const list = document.getElementById("matchList");
+    list.innerHTML = "";
+
+    const filtered = matches.filter(m =>
+        m.team1.toLowerCase().includes(keyword) ||
+        m.team2.toLowerCase().includes(keyword) ||
+        (m.league && m.league.toLowerCase().includes(keyword))
+    );
+
+    if (!filtered.length) {
+        list.innerHTML = `<div class="no-data">No matches found</div>`;
+        return;
+    }
+
+    filtered.forEach(match => {
+        const isLive = match.status === "live";
+        const timerText = isLive
+            ? "LIVE"
+            : getCountdown(match.startTime);
+
+        const card = document.createElement("div");
+        card.className = "match-card";
+
+        if (!isBettingOpen(match)) {
+            card.classList.add("closed");
+        }
+
+        card.matchData = match;
+
+        card.innerHTML = `
+            <div class="match-header">
+                <span class="league">${match.league || "Match"}</span>
+            </div>
+
+            <div class="match-body">
+                <div class="team">
+                    ${renderTeamLogo(match.team1, match.team1Logo)}
+                    <div class="team-name">${match.team1}</div>
+                </div>
+
+                <div class="vs">VS</div>
+
+                <div class="team">
+                    ${renderTeamLogo(match.team2, match.team2Logo)}
+                    <div class="team-name">${match.team2}</div>
+                </div>
+            </div>
+
+            <div class="match-time">
+                ${formatMatchTime(match.startTime)}
+                <span class="timer ${isLive ? "live" : "upcoming"}">
+                    ${timerText}
+                </span>
+            </div>
+        `;
+
+        card.onclick = () => openBetModal(match);
+
+        list.appendChild(card);
+    });
+}
+
 /* ================== BET POPUP ================== */
 /*document.addEventListener("click", e => {
     const card = e.target.closest(".match-card");
