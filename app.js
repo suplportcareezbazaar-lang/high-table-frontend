@@ -894,23 +894,16 @@ document.addEventListener("DOMContentLoaded", () => {
         renderMatchesFiltered(keyword);
     };
 
-    /* ===== MOBILE SEARCH FIX ===== */
+    /* ===== MOBILE SEARCH CONNECT ===== */
 
-    const mSearch = document.getElementById("mSearch");
+    const searchBtnMobile = document.getElementById("searchBtnMobile");
+    const searchInput = document.getElementById("searchInput");
 
-    if (mSearch) {
-        mSearch.addEventListener("click", function (e) {
-            e.preventDefault(); // stop page jump
-
-            // Close mobile menu
-            const mobileMenu = document.getElementById("mobileMenu");
-            mobileMenu.classList.remove("active");
-
-            // Show search input
-            const searchInput = document.getElementById("searchInput");
-            searchInput.classList.remove("hidden");
+    if (searchBtnMobile) {
+        searchBtnMobile.onclick = () => {
+            searchInput.classList.toggle("hidden");
             searchInput.focus();
-        });
+        };
     }
 
     // 🔥 Handle payment return safely
