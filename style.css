@@ -739,6 +739,7 @@ button:active {
 }
 
 /* MOBILE MENU */
+
 .mobile-menu {
     position: fixed;
     top: 0;
@@ -808,18 +809,6 @@ button:active {
     border: none;
     color: #00ffff;
     font-size: 18px;
-}
-
-/* SHOW ONLY ON MOBILE */
-@media (max-width: 768px) {
-
-    .desktop-nav {
-        display: none;
-    }
-
-    .mobile-actions {
-        display: flex;
-    }
 }
 
 /* ================= FOOTER ================= */
