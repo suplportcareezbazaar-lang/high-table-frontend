@@ -787,6 +787,41 @@ button:active {
     }
 }
 
+/* ===== MOBILE HEADER ACTIONS ===== */
+
+.mobile-actions {
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.mobile-actions select {
+    background: black;
+    color: #00ffff;
+    border: 1px solid #00ffff;
+    font-size: 12px;
+    padding: 3px 5px;
+}
+
+.mobile-actions button {
+    background: none;
+    border: none;
+    color: #00ffff;
+    font-size: 18px;
+}
+
+/* SHOW ONLY ON MOBILE */
+@media (max-width: 768px) {
+
+    .desktop-nav {
+        display: none;
+    }
+
+    .mobile-actions {
+        display: flex;
+    }
+}
+
 /* ================= FOOTER ================= */
 
 .site-footer {
