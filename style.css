@@ -752,7 +752,6 @@ button:active {
 }
 
 .mobile-menu a {
-    display: block;
     padding: 12px 0;
     font-size: 16px;
     color: #00ffff;
