@@ -878,31 +878,30 @@ document.addEventListener("DOMContentLoaded", () => {
     loadMatches();
     setInterval(loadMatches, 60000);
 
-    /* ===== SEARCH BUTTON LOGIC ===== */
+    /* ===== SEARCH SETUP (DESKTOP + MOBILE) ===== */
 
     const searchBtn = document.getElementById("searchBtn");
-    const searchInput = document.getElementById("searchInput");
-
-    searchBtn.onclick = () => {
-        searchInput.classList.toggle("hidden");
-        searchInput.focus();
-    };
-
-    searchInput.oninput = function () {
-        const keyword = this.value.toLowerCase();
-
-        renderMatchesFiltered(keyword);
-    };
-
-    /* ===== MOBILE SEARCH CONNECT ===== */
-
     const searchBtnMobile = document.getElementById("searchBtnMobile");
     const searchInput = document.getElementById("searchInput");
+
+    if (searchBtn) {
+        searchBtn.onclick = () => {
+            searchInput.classList.toggle("hidden");
+            searchInput.focus();
+        };
+    }
 
     if (searchBtnMobile) {
         searchBtnMobile.onclick = () => {
             searchInput.classList.toggle("hidden");
             searchInput.focus();
+        };
+    }
+
+    if (searchInput) {
+        searchInput.oninput = function () {
+            const keyword = this.value.toLowerCase();
+            renderMatchesFiltered(keyword);
         };
     }
 
