@@ -503,13 +503,19 @@ function renderMatches() {
     const filtered = uniqueMatches
         .filter(m => m.sport?.toLowerCase() === currentSport.toLowerCase())
         .filter(m => {
+
+            const now = new Date();
+            const start = new Date(m.startTime);
+
             if (currentFilter === "live") {
-                return m.status === "live";
-            }
+                return m.status === "live" || start <= now;
+            } 
+
             if (currentFilter === "upcoming") {
-                return m.status === "upcoming";
+                return start > now;
             }
-            return true;
+
+            return true; // All
         });
 
     if (!filtered.length) {
