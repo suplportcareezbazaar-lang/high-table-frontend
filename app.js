@@ -462,8 +462,12 @@ async function loadMatches(retry = 0) {
         }
 
         matches = data
-            .filter(m => m.team1 && m.team2 && m.startTime)
-            .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+            .filter(m => m.team1 && m.team2)
+            .map(m => ({
+                ...m,
+                startTime: m.startTime || new Date().toISOString()
+             }))
+             .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 
         if (!matches.length && retry < 5) {
             console.log("No matches yet, retrying...");
