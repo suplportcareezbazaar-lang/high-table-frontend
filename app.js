@@ -512,8 +512,8 @@ function renderMatches() {
             const start = new Date(m.startTime);
 
             if (currentFilter === "live") {
-                return m.status === "live" || start <= now;
-            } 
+                return m.status === "live";
+            }
 
             if (currentFilter === "upcoming") {
                 return start > now;
