@@ -462,7 +462,6 @@ async function loadMatches(retry = 0) {
         }
 
         matches = data
-            .filter(m => m.team1 && m.team2)
             .map(m => ({
                 ...m,
                 startTime: m.startTime || new Date().toISOString()
@@ -505,7 +504,7 @@ function renderMatches() {
     });
 
     const filtered = uniqueMatches
-        .filter(m => m.sport?.toLowerCase() === currentSport.toLowerCase())
+        .filter(m => (m.sport || "").toLowerCase() === currentSport.toLowerCase())
         .filter(m => {
 
             const now = new Date();
