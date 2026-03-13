@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Match Results - High Table</title>
 
@@ -53,24 +54,48 @@
             padding: 30px;
             color: #aaa;
         }
+
+        .sports-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sports-buttons button {
+            background: #16272c;
+            border: 1px solid #00ffd0;
+            color: #00ffd0;
+            padding: 8px 14px;
+            margin: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .sports-buttons button:hover {
+            background: #00ffd0;
+            color: black;
+        }
     </style>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h2>🏆 Match Results</h2>
+    <h2>🏆 Match Results</h2>
 
-<div style="text-align:center;margin-bottom:20px;">
+    <div style="text-align:center;margin-bottom:20px;">
 
-<button onclick="loadResults('football')">Football</button>
-<button onclick="loadResults('cricket')">Cricket</button>
-<button onclick="loadResults('basketball')">Basketball</button>
+        <button onclick="loadResults('football')">Football</button>
+        <button onclick="loadResults('cricket')">Cricket</button>
+        <button onclick="loadResults('basketball')">Basketball</button>
+        <button onclick="loadResults('volleyball')">Volleyball</button>
 
-</div>
+    </div>
 
-<div id="resultsContainer"></div>
+    <div id="resultsContainer"></div>
 
-<script src="results.js"></script>
+    <script src="results.js"></script>
 
 </body>
+
 </html>
