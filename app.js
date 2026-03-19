@@ -882,67 +882,49 @@ async function loadProfitLoss() {
     }
 
     try {
-        const res = await fetch(`${API}/wallet/history`, {
+        const res = await fetch(`${API}/profit-loss`, {
             headers: { Authorization: "Bearer " + token }
         });
 
         const data = await res.json();
 
-        if (!Array.isArray(data)) {
-            historyContent.innerHTML = "No data";
+        if (data.error) {
+            historyContent.innerHTML = "Failed to load data";
             return;
         }
 
-        const now = new Date();
-        const last30Days = new Date();
-        last30Days.setDate(now.getDate() - 30);
-
-        let totalDeposit = 0;
-        let totalWithdraw = 0;
-        let totalBet = 0;
-        let totalWin = 0;
-
-        data.forEach(tx => {
-            if (!tx.createdAt) return;
-
-            const txDate = new Date(tx.createdAt);
-            if (txDate < last30Days) return;
-
-            const amount = Number(tx.amount) || 0;
-            const type = (tx.type || "").toLowerCase();
-
-            if (type.includes("deposit")) totalDeposit += amount;
-            else if (type.includes("withdraw")) totalWithdraw += Math.abs(amount);
-            else if (type.includes("bet")) totalBet += Math.abs(amount);
-            else if (type.includes("win")) totalWin += amount;
-        });
-
-        const profit = totalWin - totalBet;
+        const profitColor = data.profit >= 0 ? "lime" : "red";
 
         historyContent.innerHTML = `
             <div style="padding:20px;text-align:center">
-                <h3>📊 Last 30 Days Summary</h3>
+
+                <h3>📊 Last 30 Days</h3>
 
                 <div style="margin-top:15px">
-                    <p>💰 Deposited: <b>${totalDeposit.toFixed(2)}</b></p>
-                    <p>🏧 Withdrawn: <b>${totalWithdraw.toFixed(2)}</b></p>
-                    <p>🎯 Total Bet: <b>${totalBet.toFixed(2)}</b></p>
-                    <p>🏆 Total Win: <b style="color:lime">${totalWin.toFixed(2)}</b></p>
+
+                    <p>🎯 Total Bet: 
+                        <b>${data.totalSpent.toFixed(2)}</b>
+                    </p>
+
+                    <p>🏆 Total Win: 
+                        <b style="color:lime">${data.totalWon.toFixed(2)}</b>
+                    </p>
 
                     <hr style="margin:15px 0">
 
                     <p style="font-size:18px">
-                        📈 Profit/Loss:
-                        <b style="color:${profit >= 0 ? 'lime' : 'red'}">
-                            ${profit.toFixed(2)}
+                        📈 Profit / Loss:
+                        <b style="color:${profitColor}">
+                            ${data.profit.toFixed(2)}
                         </b>
                     </p>
+
                 </div>
             </div>
         `;
 
     } catch (err) {
-        console.error("Profit error:", err);
+        console.error("Profit API error:", err);
         historyContent.innerHTML = "Failed to load profit data";
     }
 }
