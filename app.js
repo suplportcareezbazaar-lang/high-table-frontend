@@ -902,6 +902,14 @@ async function loadProfitLoss() {
 
                 <div style="margin-top:15px">
 
+                    <p>💰 Deposited: 
+                        <b>${data.totalDeposit.toFixed(2)}</b>
+                    </p>
+
+                    <p>🏧 Withdrawn: 
+                        <b>${data.totalWithdraw.toFixed(2)}</b>
+                    </p>
+
                     <p>🎯 Total Bet: 
                         <b>${data.totalSpent.toFixed(2)}</b>
                     </p>
