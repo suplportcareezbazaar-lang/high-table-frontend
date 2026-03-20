@@ -3,6 +3,7 @@
 
 <head>
     <title>Admin Panel – High Table</title>
+
     <style>
         body {
             background: #0f0f0f;
@@ -13,13 +14,43 @@
 
         h2 {
             text-align: center;
-            color: #ffcc00;
+            color: #00e5ff;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .tabs button {
+            padding: 10px 20px;
+            border: none;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .tabs button.active {
+            background: #00e5ff;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         th,
@@ -30,113 +61,158 @@
         }
 
         th {
-            background: #222;
+            background: #111;
         }
 
         button {
-            padding: 6px 12px;
-            cursor: pointer;
+            padding: 8px 14px;
             border: none;
-            border-radius: 4px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
         }
 
-        .approve {
+        .stop {
+            background: #ff5252;
+            color: #fff;
+        }
+
+        .start {
             background: #00c853;
             color: #000;
-        }
-
-        .approved {
-            color: #00ff99;
-            font-weight: bold;
-        }
-
-        .pending {
-            color: #ff5252;
-            font-weight: bold;
-        }
-
-        .admin-section {
-            padding: 20px;
-        }
-
-        .filter-bar {
-            margin-bottom: 10px;
-        }
-
-        .filter-bar button {
-            margin-right: 5px;
-            padding: 6px 12px;
-            cursor: pointer;
-        }
-
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .admin-table th,
-        .admin-table td {
-            border: 1px solid #333;
-            padding: 8px;
-            text-align: center;
-        }
-
-        .admin-table th {
-            background: #111;
         }
     </style>
 </head>
 
 <body>
 
-    <h2>ADMIN – AGENT APPROVAL</h2>
+    <h2>⚙️ ADMIN PANEL</h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Agent ID</th>
-                <th>Username</th>
-                <th>Status</th>
-                <th>Action</th>
-                <th>Total Commission</th>
-                <th>Payout</th>
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab active" data-tab="users">Users</button>
+        <button class="tab" data-tab="banks">Bank</button>
+        <button class="tab" data-tab="bets">Bets</button>
+        <button class="tab" data-tab="deposits">Deposits</button>
+        <button class="tab" data-tab="withdraw">Withdrawals</button>
+        <button class="tab" data-tab="sports">Sports</button>
+    </div>
 
-            </tr>
-        </thead>
-        <tbody id="agentTable"></tbody>
-    </table>
+    <!-- USERS -->
+    <div id="users" class="admin-section active">
+        <h3>All Users</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Role</th>
+                    <th>User ID</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="userTable"></tbody>
+        </table>
+    </div>
 
-    <!-- ================= WITHDRAWAL DASHBOARD ================= -->
-    <section class="admin-section">
-        <div class="admin-card">
-            <h3>Withdrawals</h3>
+    <!-- BANK -->
+    <div id="banks" class="admin-section">
+        <h3>Bank Details</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>User ID</th>
+                    <th>Bank Name</th>
+                    <th>Account No</th>
+                </tr>
+            </thead>
+            <tbody id="bankTable"></tbody>
+        </table>
+    </div>
 
-            <select id="withdrawFilter">
-                <option value="">All</option>
-                <option value="PENDING">Pending</option>
-                <option value="APPROVED">Approved</option>
-                <option value="PROCESSING">Processing</option>
-                <option value="PAID">Paid</option>
-                <option value="FAILED">Failed</option>
-            </select>
+    <!-- BETS -->
+    <div id="bets" class="admin-section">
+        <h3>Daily Bets</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>User ID</th>
+                    <th>Match</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="betTable"></tbody>
+        </table>
+    </div>
 
-            <table id="withdrawTable">
-                <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Bank</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+    <!-- DEPOSITS -->
+    <div id="deposits" class="admin-section">
+        <h3>Deposits</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>User ID</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="depositTable"></tbody>
+        </table>
+    </div>
+
+    <!-- WITHDRAW -->
+    <div id="withdraw" class="admin-section">
+        <h3>Withdrawals</h3>
+
+        <select id="withdrawFilter">
+            <option value="">All</option>
+            <option value="PENDING">Pending</option>
+            <option value="APPROVED">Approved</option>
+        </select>
+
+        <table id="withdrawTable">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Bank</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- SPORTS CONTROL -->
+    <div id="sports" class="admin-section">
+        <h3>Sports Control</h3>
+
+        <div id="sportsControls">
+            <!-- Dynamic buttons will come here -->
         </div>
+    </div>
 
-    </section>
+    <script>
+        // TAB SWITCH
+        document.querySelectorAll(".tab").forEach(btn => {
+            btn.onclick = () => {
+
+                document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                document.querySelectorAll(".admin-section").forEach(sec => sec.classList.remove("active"));
+                document.getElementById(btn.dataset.tab).classList.add("active");
+            };
+        });
+    </script>
 
     <script src="admin.js"></script>
-</body>
 
+</body>
 </html>
