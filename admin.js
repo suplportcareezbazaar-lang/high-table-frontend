@@ -57,6 +57,39 @@ function renderPagination(containerId, data, currentPage, onPageChange) {
   }
 }
 
+/* ================= DASHBOARD ================= */
+
+async function loadDashboard() {
+  const data = await authFetch(`${API}/admin/dashboard`);
+
+  document.getElementById("totalUsers").innerText = data.totalUsers;
+  document.getElementById("totalBets").innerText = data.totalBets;
+  document.getElementById("totalDeposits").innerText = data.totalDeposits;
+  document.getElementById("totalWithdrawals").innerText = data.totalWithdrawals;
+  document.getElementById("totalProfit").innerText = data.profit;
+}
+
+async function loadLiveBets() {
+  const data = await authFetch(`${API}/admin/live-bets`);
+
+  const table = document.getElementById("liveBets");
+  table.innerHTML = "";
+
+  data.forEach(b => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${b.username}</td>
+      <td>${b.match}</td>
+      <td>${b.team}</td>
+      <td>${b.amount}</td>
+      <td>${new Date(b.time).toLocaleTimeString()}</td>
+    `;
+
+    table.appendChild(tr);
+  });
+}
+
 /* ================= USERS ================= */
 
 let allUsers = [];
@@ -85,18 +118,18 @@ function renderUsers() {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
-            <td>${u.username}</td>
-            <td>${u.email}</td>
-            <td>${u.mobile}</td>
-            <td>${u.role}</td>
-            <td>${u._id}</td>
-            <td>${u.blocked ? "❌ Banned" : "✅ Active"}</td>
-            <td>
-                <button onclick="toggleUser('${u._id}', ${u.blocked})">
-                    ${u.blocked ? "Unban" : "Ban"}
-                </button>
-            </td>
-        `;
+      <td>${u.username}</td>
+      <td>${u.email}</td>
+      <td>${u.mobile}</td>
+      <td>${u.role}</td>
+      <td>${u._id}</td>
+      <td>${u.blocked ? "❌ Banned" : "✅ Active"}</td>
+      <td>
+        <button onclick="toggleUser('${u._id}', ${u.blocked})">
+          ${u.blocked ? "Unban" : "Ban"}
+        </button>
+      </td>
+    `;
 
     table.appendChild(tr);
   });
@@ -150,11 +183,11 @@ function renderBanks() {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
-            <td>${b.username}</td>
-            <td>${b.userId}</td>
-            <td>${b.bankName}</td>
-            <td>${b.number}</td>
-        `;
+      <td>${b.username}</td>
+      <td>${b.userId}</td>
+      <td>${b.bankName}</td>
+      <td>${b.number}</td>
+    `;
 
     table.appendChild(tr);
   });
@@ -193,11 +226,11 @@ function renderBets() {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
-            <td>${b.username}</td>
-            <td>${b.userId}</td>
-            <td>${b.matchName}</td>
-            <td>${b.amount}</td>
-        `;
+      <td>${b.username}</td>
+      <td>${b.userId}</td>
+      <td>${b.matchName}</td>
+      <td>${b.amount}</td>
+    `;
 
     table.appendChild(tr);
   });
@@ -235,11 +268,11 @@ function renderDeposits() {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
-            <td>${d.username}</td>
-            <td>${d.userId}</td>
-            <td>${d.amount}</td>
-            <td>${new Date(d.createdAt).toLocaleString()}</td>
-        `;
+      <td>${d.username}</td>
+      <td>${d.userId}</td>
+      <td>${d.amount}</td>
+      <td>${new Date(d.createdAt).toLocaleString()}</td>
+    `;
 
     table.appendChild(tr);
   });
@@ -264,17 +297,17 @@ async function loadWithdrawals(status = "") {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
-            <td>${w.userId}</td>
-            <td>${w.amount}</td>
-            <td>${w.status}</td>
-            <td>${w.bankSnapshot?.bankName || "-"}</td>
-            <td>
-                ${w.status === "PENDING"
+      <td>${w.userId}</td>
+      <td>${w.amount}</td>
+      <td>${w.status}</td>
+      <td>${w.bankSnapshot?.bankName || "-"}</td>
+      <td>
+        ${w.status === "PENDING"
         ? `<button onclick="approveWithdraw('${w.withdrawalId}')">Approve</button>
-                   <button onclick="rejectWithdraw('${w.withdrawalId}')">Reject</button>`
+           <button onclick="rejectWithdraw('${w.withdrawalId}')">Reject</button>`
         : ""}
-            </td>
-        `;
+      </td>
+    `;
 
     table.appendChild(tr);
   });
@@ -339,6 +372,11 @@ document.querySelectorAll(".tab").forEach(btn => {
   btn.addEventListener("click", () => {
     const tab = btn.dataset.tab;
 
+    if (tab === "dashboard") {
+      loadDashboard();
+      loadLiveBets();
+    }
+
     if (tab === "users") loadUsers();
     if (tab === "banks") loadBanks();
     if (tab === "bets") loadBets();
@@ -348,9 +386,18 @@ document.querySelectorAll(".tab").forEach(btn => {
   });
 });
 
+/* ================= AUTO REFRESH ================= */
+
+setInterval(() => {
+  loadLiveBets();
+  loadDashboard();
+}, 5000);
+
 /* ================= INIT ================= */
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadDashboard();
+  loadLiveBets();
   loadUsers();
   loadWithdrawals("PENDING");
 });
