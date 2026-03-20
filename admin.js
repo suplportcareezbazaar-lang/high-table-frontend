@@ -366,6 +366,43 @@ async function toggleSport(sport) {
   loadSportsControl();
 }
 
+async function loadFraudAlerts() {
+
+    const data = await authFetch(`${API}/admin/fraud-alerts`);
+
+    const table = document.getElementById("fraudAlerts");
+    table.innerHTML = "";
+
+    // 🚨 BIG BETS
+    data.bigBets.forEach(b => {
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${b.userId}</td>
+            <td style="color:red">BIG BET</td>
+            <td>₹${b.amount}</td>
+        `;
+
+        table.appendChild(tr);
+    });
+
+    // 🚨 SPAM USERS
+    data.spamUsers.forEach(u => {
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${u._id}</td>
+            <td style="color:orange">SPAM BETTING</td>
+            <td>${u.count} bets in 5 min</td>
+        `;
+
+        table.appendChild(tr);
+    });
+
+}
+
 /* ================= TAB ================= */
 
 document.querySelectorAll(".tab").forEach(btn => {
@@ -375,6 +412,7 @@ document.querySelectorAll(".tab").forEach(btn => {
     if (tab === "dashboard") {
       loadDashboard();
       loadLiveBets();
+      loadFraudAlerts();
     }
 
     if (tab === "users") loadUsers();
@@ -391,6 +429,7 @@ document.querySelectorAll(".tab").forEach(btn => {
 setInterval(() => {
   loadLiveBets();
   loadDashboard();
+  loadFraudAlerts();
 }, 5000);
 
 /* ================= INIT ================= */
@@ -399,5 +438,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadDashboard();
   loadLiveBets();
   loadUsers();
+  loadFraudAlerts();
   loadWithdrawals("PENDING");
 });
