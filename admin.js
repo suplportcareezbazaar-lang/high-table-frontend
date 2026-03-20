@@ -2,236 +2,355 @@ const API = "https://high-table-backend.onrender.com/api";
 const token = localStorage.getItem("adminToken");
 
 if (!token) {
-    alert("Admin login required");
-    location.href = "index.html";
+  alert("Admin login required");
+  location.href = "index.html";
 }
 
 /* ================= AUTH ================= */
 
 async function authFetch(url, options = {}) {
-    const res = await fetch(url, {
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token
-        }
-    });
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    }
+  });
 
-    if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text);
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text);
+  }
+
+  return res.json();
+}
+
+/* ================= PAGINATION ================= */
+
+const PAGE_SIZE = 10;
+
+function paginate(data, page) {
+  const start = (page - 1) * PAGE_SIZE;
+  return data.slice(start, start + PAGE_SIZE);
+}
+
+function renderPagination(containerId, data, currentPage, onPageChange) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const totalPages = Math.ceil(data.length / PAGE_SIZE);
+  if (totalPages <= 1) return;
+
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.innerText = i;
+
+    if (i === currentPage) {
+      btn.style.background = "#00e5ff";
+      btn.style.color = "#000";
     }
 
-    return res.json();
+    btn.onclick = () => onPageChange(i);
+    container.appendChild(btn);
+  }
 }
 
 /* ================= USERS ================= */
 
+let allUsers = [];
+let userPage = 1;
+
 async function loadUsers() {
-    const data = await authFetch(`${API}/admin/users`);
+  allUsers = await authFetch(`${API}/admin/users`);
+  userPage = 1;
+  renderUsers();
+}
 
-    const table = document.getElementById("userTable");
-    table.innerHTML = "";
+function renderUsers() {
+  const search = document.getElementById("userSearch")?.value.toLowerCase() || "";
 
-    data.forEach(u => {
-        const tr = document.createElement("tr");
+  const filtered = allUsers.filter(u =>
+    u.username.toLowerCase().includes(search) ||
+    u.email.toLowerCase().includes(search)
+  );
 
-        tr.innerHTML = `
+  const pageData = paginate(filtered, userPage);
+
+  const table = document.getElementById("userTable");
+  table.innerHTML = "";
+
+  pageData.forEach(u => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
             <td>${u.username}</td>
             <td>${u.email}</td>
             <td>${u.mobile}</td>
             <td>${u.role}</td>
-            <td>${u.userId || "-"}</td>
+            <td>${u._id}</td>
             <td>${u.blocked ? "❌ Banned" : "✅ Active"}</td>
             <td>
-                <button class="ban" onclick="toggleUser('${u._id}', ${u.blocked})">
+                <button onclick="toggleUser('${u._id}', ${u.blocked})">
                     ${u.blocked ? "Unban" : "Ban"}
                 </button>
             </td>
         `;
 
-        table.appendChild(tr);
-    });
+    table.appendChild(tr);
+  });
+
+  renderPagination("userPagination", filtered, userPage, (p) => {
+    userPage = p;
+    renderUsers();
+  });
 }
 
-async function toggleUser(userId, blocked) {
-    await authFetch(`${API}/admin/user/ban`, {
-        method: "POST",
-        body: JSON.stringify({ userId, blocked: !blocked })
-    });
+document.addEventListener("input", (e) => {
+  if (e.target.id === "userSearch") {
+    userPage = 1;
+    renderUsers();
+  }
+});
 
-    loadUsers();
+async function toggleUser(userId, blocked) {
+  await authFetch(`${API}/admin/user/ban`, {
+    method: "POST",
+    body: JSON.stringify({ userId, blocked: !blocked })
+  });
+
+  loadUsers();
 }
 
 /* ================= BANK ================= */
 
+let allBanks = [];
+let bankPage = 1;
+
 async function loadBanks() {
-    const data = await authFetch(`${API}/admin/banks`);
+  allBanks = await authFetch(`${API}/admin/banks`);
+  bankPage = 1;
+  renderBanks();
+}
 
-    const table = document.getElementById("bankTable");
-    table.innerHTML = "";
+function renderBanks() {
+  const search = document.getElementById("bankSearch")?.value.toLowerCase() || "";
 
-    data.forEach(b => {
-        const tr = document.createElement("tr");
+  const filtered = allBanks.filter(b =>
+    b.username.toLowerCase().includes(search)
+  );
 
-        tr.innerHTML = `
+  const pageData = paginate(filtered, bankPage);
+
+  const table = document.getElementById("bankTable");
+  table.innerHTML = "";
+
+  pageData.forEach(b => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
             <td>${b.username}</td>
             <td>${b.userId}</td>
             <td>${b.bankName}</td>
             <td>${b.number}</td>
         `;
 
-        table.appendChild(tr);
-    });
+    table.appendChild(tr);
+  });
+
+  renderPagination("bankPagination", filtered, bankPage, (p) => {
+    bankPage = p;
+    renderBanks();
+  });
 }
 
 /* ================= BETS ================= */
 
+let allBets = [];
+let betPage = 1;
+
 async function loadBets() {
-    const data = await authFetch(`${API}/admin/bets`);
+  allBets = await authFetch(`${API}/admin/bets`);
+  betPage = 1;
+  renderBets();
+}
 
-    const table = document.getElementById("betTable");
-    table.innerHTML = "";
+function renderBets() {
+  const search = document.getElementById("betSearch")?.value.toLowerCase() || "";
 
-    data.forEach(b => {
-        const tr = document.createElement("tr");
+  const filtered = allBets.filter(b =>
+    b.username.toLowerCase().includes(search) ||
+    b.matchName.toLowerCase().includes(search)
+  );
 
-        tr.innerHTML = `
+  const pageData = paginate(filtered, betPage);
+
+  const table = document.getElementById("betTable");
+  table.innerHTML = "";
+
+  pageData.forEach(b => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
             <td>${b.username}</td>
             <td>${b.userId}</td>
             <td>${b.matchName}</td>
             <td>${b.amount}</td>
         `;
 
-        table.appendChild(tr);
-    });
+    table.appendChild(tr);
+  });
+
+  renderPagination("betPagination", filtered, betPage, (p) => {
+    betPage = p;
+    renderBets();
+  });
 }
 
 /* ================= DEPOSITS ================= */
 
+let allDeposits = [];
+let depositPage = 1;
+
 async function loadDeposits() {
-    const data = await authFetch(`${API}/admin/deposits`);
+  allDeposits = await authFetch(`${API}/admin/deposits`);
+  depositPage = 1;
+  renderDeposits();
+}
 
-    const table = document.getElementById("depositTable");
-    table.innerHTML = "";
+function renderDeposits() {
+  const search = document.getElementById("depositSearch")?.value.toLowerCase() || "";
 
-    data.forEach(d => {
-        const tr = document.createElement("tr");
+  const filtered = allDeposits.filter(d =>
+    d.username.toLowerCase().includes(search)
+  );
 
-        tr.innerHTML = `
+  const pageData = paginate(filtered, depositPage);
+
+  const table = document.getElementById("depositTable");
+  table.innerHTML = "";
+
+  pageData.forEach(d => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
             <td>${d.username}</td>
             <td>${d.userId}</td>
             <td>${d.amount}</td>
             <td>${new Date(d.createdAt).toLocaleString()}</td>
         `;
 
-        table.appendChild(tr);
-    });
+    table.appendChild(tr);
+  });
+
+  renderPagination("depositPagination", filtered, depositPage, (p) => {
+    depositPage = p;
+    renderDeposits();
+  });
 }
 
 /* ================= WITHDRAW ================= */
 
 async function loadWithdrawals(status = "") {
-    const data = await authFetch(
-        `${API}/admin/withdrawals${status ? `?status=${status}` : ""}`
-    );
+  const data = await authFetch(
+    `${API}/admin/withdrawals${status ? `?status=${status}` : ""}`
+  );
 
-    const tbody = document.querySelector("#withdrawTable tbody");
-    tbody.innerHTML = "";
+  const table = document.getElementById("withdrawTable");
+  table.innerHTML = "";
 
-    data.forEach(w => {
-        const tr = document.createElement("tr");
+  data.forEach(w => {
+    const tr = document.createElement("tr");
 
-        tr.innerHTML = `
+    tr.innerHTML = `
             <td>${w.userId}</td>
             <td>${w.amount}</td>
             <td>${w.status}</td>
             <td>${w.bankSnapshot?.bankName || "-"}</td>
             <td>
                 ${w.status === "PENDING"
-                ? `<button onclick="approveWithdraw('${w._id}')">Approve</button>
-                   <button class="reject" onclick="rejectWithdraw('${w._id}')">Reject</button>`
-                : ""}
+        ? `<button onclick="approveWithdraw('${w.withdrawalId}')">Approve</button>
+                   <button onclick="rejectWithdraw('${w.withdrawalId}')">Reject</button>`
+        : ""}
             </td>
         `;
 
-        tbody.appendChild(tr);
-    });
+    table.appendChild(tr);
+  });
 }
 
 async function approveWithdraw(id) {
-    await authFetch(`${API}/admin/withdraw/approve`, {
-        method: "POST",
-        body: JSON.stringify({ withdrawalId: id })
-    });
+  await authFetch(`${API}/admin/withdraw/approve`, {
+    method: "POST",
+    body: JSON.stringify({ withdrawalId: id })
+  });
 
-    loadWithdrawals("PENDING");
+  loadWithdrawals("PENDING");
 }
 
 async function rejectWithdraw(id) {
-    await authFetch(`${API}/admin/withdraw/reject`, {
-        method: "POST",
-        body: JSON.stringify({ withdrawalId: id })
-    });
+  await authFetch(`${API}/admin/withdraw/reject`, {
+    method: "POST",
+    body: JSON.stringify({ withdrawalId: id })
+  });
 
-    loadWithdrawals("PENDING");
+  loadWithdrawals("PENDING");
 }
 
-/* ================= SPORTS CONTROL ================= */
+/* ================= SPORTS ================= */
 
 const sports = ["cricket", "football", "basketball", "volleyball"];
 
 async function loadSportsControl() {
-    const container = document.getElementById("sportsControls");
-    container.innerHTML = "";
+  const container = document.getElementById("sportsControls");
+  container.innerHTML = "";
 
-    const data = await authFetch(`${API}/admin/sports/status`);
+  const data = await authFetch(`${API}/admin/sports/status`);
 
-    sports.forEach(sport => {
+  sports.forEach(sport => {
+    const isStopped = data[sport];
 
-        const isStopped = data[sport];
+    const btn = document.createElement("button");
+    btn.className = isStopped ? "start" : "stop";
 
-        const btn = document.createElement("button");
-        btn.className = isStopped ? "start" : "stop";
+    btn.innerText = isStopped
+      ? `Start ${sport}`
+      : `Stop ${sport}`;
 
-        btn.innerText = isStopped
-            ? `Start ${sport}`
-            : `Stop ${sport}`;
+    btn.onclick = () => toggleSport(sport);
 
-        btn.onclick = () => toggleSport(sport);
-
-        container.appendChild(btn);
-    });
+    container.appendChild(btn);
+  });
 }
 
 async function toggleSport(sport) {
-    await authFetch(`${API}/admin/sports/toggle`, {
-        method: "POST",
-        body: JSON.stringify({ sport })
-    });
+  await authFetch(`${API}/admin/sports/toggle`, {
+    method: "POST",
+    body: JSON.stringify({ sport })
+  });
 
-    loadSportsControl();
+  loadSportsControl();
 }
 
-/* ================= TAB AUTO LOAD ================= */
+/* ================= TAB ================= */
 
 document.querySelectorAll(".tab").forEach(btn => {
-    btn.addEventListener("click", () => {
+  btn.addEventListener("click", () => {
+    const tab = btn.dataset.tab;
 
-        const tab = btn.dataset.tab;
-
-        if (tab === "users") loadUsers();
-        if (tab === "banks") loadBanks();
-        if (tab === "bets") loadBets();
-        if (tab === "deposits") loadDeposits();
-        if (tab === "withdraw") loadWithdrawals();
-        if (tab === "sports") loadSportsControl();
-    });
+    if (tab === "users") loadUsers();
+    if (tab === "banks") loadBanks();
+    if (tab === "bets") loadBets();
+    if (tab === "deposits") loadDeposits();
+    if (tab === "withdraw") loadWithdrawals();
+    if (tab === "sports") loadSportsControl();
+  });
 });
 
 /* ================= INIT ================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadUsers();
-    loadWithdrawals("PENDING");
+  loadUsers();
+  loadWithdrawals("PENDING");
 });
