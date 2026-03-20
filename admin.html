@@ -2,78 +2,104 @@
 <html>
 
 <head>
-    <title>Admin Panel – High Table</title>
+    <title>Admin Panel</title>
 
     <style>
         body {
-            background: #0f0f0f;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #0a0a0a;
             color: #fff;
-            font-family: Arial;
-            padding: 20px;
+            display: flex;
         }
 
-        h2 {
+        /* SIDEBAR */
+        .sidebar {
+            width: 220px;
+            background: #111;
+            height: 100vh;
+            padding: 20px;
+            border-right: 1px solid #222;
+        }
+
+        .sidebar h2 {
             text-align: center;
             color: #00e5ff;
         }
 
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            gap: 10px;
-        }
-
-        .tabs button {
-            padding: 10px 20px;
+        .menu button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            background: #1a1a1a;
             border: none;
-            background: #222;
             color: #fff;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 6px;
+            text-align: left;
         }
 
-        .tabs button.active {
+        .menu button.active {
             background: #00e5ff;
             color: #000;
             font-weight: bold;
         }
 
-        .admin-section {
-            display: none;
+        /* MAIN */
+        .main {
+            flex: 1;
+            padding: 20px;
         }
 
-        .admin-section.active {
-            display: block;
+        h3 {
+            margin-top: 0;
+            color: #00e5ff;
         }
 
+        /* TABLE */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            background: #111;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         th,
         td {
-            border: 1px solid #333;
-            padding: 8px;
+            padding: 12px;
+            border-bottom: 1px solid #222;
             text-align: center;
         }
 
         th {
-            background: #111;
+            background: #0f0f0f;
         }
 
+        tr:hover {
+            background: #1a1a1a;
+        }
+
+        /* BUTTONS */
         button {
-            padding: 8px 14px;
+            padding: 6px 12px;
             border: none;
-            cursor: pointer;
             border-radius: 5px;
-            margin: 5px;
+            cursor: pointer;
         }
 
-        .stop {
+        .approve {
+            background: #00c853;
+            color: #000;
+        }
+
+        .reject {
             background: #ff5252;
+            color: #fff;
+        }
+
+        .ban {
+            background: #ff1744;
             color: #fff;
         }
 
@@ -81,132 +107,158 @@
             background: #00c853;
             color: #000;
         }
+
+        .stop {
+            background: #ff5252;
+            color: #fff;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        select {
+            padding: 6px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
 <body>
 
-    <h2>⚙️ ADMIN PANEL</h2>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>⚙️ Admin</h2>
 
-    <!-- TABS -->
-    <div class="tabs">
-        <button class="tab active" data-tab="users">Users</button>
-        <button class="tab" data-tab="banks">Bank</button>
-        <button class="tab" data-tab="bets">Bets</button>
-        <button class="tab" data-tab="deposits">Deposits</button>
-        <button class="tab" data-tab="withdraw">Withdrawals</button>
-        <button class="tab" data-tab="sports">Sports</button>
-    </div>
-
-    <!-- USERS -->
-    <div id="users" class="admin-section active">
-        <h3>All Users</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>Role</th>
-                    <th>User ID</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="userTable"></tbody>
-        </table>
-    </div>
-
-    <!-- BANK -->
-    <div id="banks" class="admin-section">
-        <h3>Bank Details</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>User ID</th>
-                    <th>Bank Name</th>
-                    <th>Account No</th>
-                </tr>
-            </thead>
-            <tbody id="bankTable"></tbody>
-        </table>
-    </div>
-
-    <!-- BETS -->
-    <div id="bets" class="admin-section">
-        <h3>Daily Bets</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>User ID</th>
-                    <th>Match</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody id="betTable"></tbody>
-        </table>
-    </div>
-
-    <!-- DEPOSITS -->
-    <div id="deposits" class="admin-section">
-        <h3>Deposits</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>User ID</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody id="depositTable"></tbody>
-        </table>
-    </div>
-
-    <!-- WITHDRAW -->
-    <div id="withdraw" class="admin-section">
-        <h3>Withdrawals</h3>
-
-        <select id="withdrawFilter">
-            <option value="">All</option>
-            <option value="PENDING">Pending</option>
-            <option value="APPROVED">Approved</option>
-        </select>
-
-        <table id="withdrawTable">
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Bank</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <!-- SPORTS CONTROL -->
-    <div id="sports" class="admin-section">
-        <h3>Sports Control</h3>
-
-        <div id="sportsControls">
-            <!-- Dynamic buttons will come here -->
+        <div class="menu">
+            <button class="tab active" data-tab="users">Users</button>
+            <button class="tab" data-tab="banks">Bank</button>
+            <button class="tab" data-tab="bets">Bets</button>
+            <button class="tab" data-tab="deposits">Deposits</button>
+            <button class="tab" data-tab="withdraw">Withdrawals</button>
+            <button class="tab" data-tab="sports">Sports</button>
         </div>
     </div>
 
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- USERS -->
+        <div id="users" class="section active">
+            <h3>Users</h3>
+
+            <input type="text" id="userSearch" placeholder="Search user..." />
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Role</th>
+                        <th>ID</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="userTable"></tbody>
+            </table>
+
+            <div id="userPagination"></div>
+        </div>
+
+        <!-- BANK -->
+        <div id="banks" class="section">
+            <h3>Bank Details</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>ID</th>
+                        <th>Bank</th>
+                        <th>Account</th>
+                    </tr>
+                </thead>
+                <tbody id="bankTable"></tbody>
+            </table>
+        </div>
+
+        <!-- BETS -->
+        <div id="bets" class="section">
+            <h3>Bets</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>ID</th>
+                        <th>Match</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="betTable"></tbody>
+            </table>
+        </div>
+
+        <!-- DEPOSITS -->
+        <div id="deposits" class="section">
+            <h3>Deposits</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>ID</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="depositTable"></tbody>
+            </table>
+        </div>
+
+        <!-- WITHDRAW -->
+        <div id="withdraw" class="section">
+            <h3>Withdrawals</h3>
+
+            <select id="withdrawFilter">
+                <option value="">All</option>
+                <option value="PENDING">Pending</option>
+                <option value="APPROVED">Approved</option>
+            </select>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Bank</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="withdrawTable"></tbody>
+            </table>
+        </div>
+
+        <!-- SPORTS -->
+        <div id="sports" class="section">
+            <h3>Sports Control</h3>
+            <div id="sportsControls"></div>
+        </div>
+
+    </div>
+
     <script>
-        // TAB SWITCH
         document.querySelectorAll(".tab").forEach(btn => {
             btn.onclick = () => {
 
                 document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
                 btn.classList.add("active");
 
-                document.querySelectorAll(".admin-section").forEach(sec => sec.classList.remove("active"));
+                document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
                 document.getElementById(btn.dataset.tab).classList.add("active");
             };
         });
@@ -215,4 +267,5 @@
     <script src="admin.js"></script>
 
 </body>
+
 </html>
