@@ -2,106 +2,270 @@
 <html>
 
 <head>
-    <title>Agent Panel – High Table</title>
+    <title>Admin Panel</title>
+
     <style>
         body {
-            background: #0f0f0f;
-            color: #fff;
-            font-family: Arial;
             margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 220px;
+            background: #111;
+            height: 100vh;
+            padding: 20px;
+            border-right: 1px solid #222;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            color: #00e5ff;
+        }
+
+        .menu button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            background: #1a1a1a;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 6px;
+            text-align: left;
+        }
+
+        .menu button.active {
+            background: #00e5ff;
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* MAIN */
+        .main {
+            flex: 1;
             padding: 20px;
         }
 
-        h2 {
-            text-align: center;
-            color: #00ffff;
+        h3 {
+            margin-top: 0;
+            color: #00e5ff;
         }
 
-        .tree {
-            display: flex;
-            justify-content: center;
-            margin-top: 40px;
-        }
-
-        .node {
-            background: #1e1e1e;
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #111;
             border-radius: 10px;
-            padding: 10px;
-            width: 160px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #222;
             text-align: center;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
         }
 
-        .node.agent {
-            border: 2px solid #00ffff;
+        th {
+            background: #0f0f0f;
         }
 
-        .node.downline {
-            border: 2px solid #555;
+        tr:hover {
+            background: #1a1a1a;
         }
 
-        .node h4 {
-            margin: 6px 0;
-            font-size: 14px;
-        }
-
-        .node p {
-            margin: 3px 0;
-            font-size: 12px;
-            color: #ccc;
-        }
-
-        .downlines {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-
-        .line {
-            width: 2px;
-            height: 30px;
-            background: #555;
-            margin: 0 auto;
-        }
-
-        .top-controls {
-            text-align: center;
-            margin-top: 20px;
-        }
-
+        /* BUTTONS */
         button {
             padding: 6px 12px;
-            margin: 5px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+        }
+
+        .approve {
+            background: #00c853;
+            color: #000;
+        }
+
+        .reject {
+            background: #ff5252;
+            color: #fff;
+        }
+
+        .ban {
+            background: #ff1744;
+            color: #fff;
+        }
+
+        .start {
+            background: #00c853;
+            color: #000;
+        }
+
+        .stop {
+            background: #ff5252;
+            color: #fff;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        select {
+            padding: 6px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 
 <body>
 
-    <h2>AGENT TREE VIEW</h2>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>⚙️ Admin</h2>
 
-    <div class="top-controls">
-        <button onclick="loadTree()">Refresh</button>
-        <button onclick="logout()">Logout</button>
-    </div>
-
-    <div class="tree">
-        <div class="node agent" id="agentNode">
-            <h4>YOU</h4>
-            <p>Agent</p>
+        <div class="menu">
+            <button class="tab active" data-tab="users">Users</button>
+            <button class="tab" data-tab="banks">Bank</button>
+            <button class="tab" data-tab="bets">Bets</button>
+            <button class="tab" data-tab="deposits">Deposits</button>
+            <button class="tab" data-tab="withdraw">Withdrawals</button>
+            <button class="tab" data-tab="sports">Sports</button>
         </div>
     </div>
 
-    <div class="line"></div>
+    <!-- MAIN -->
+    <div class="main">
 
-    <div class="downlines" id="downlineContainer">
-        <!-- Downlines render here -->
+        <!-- USERS -->
+        <div id="users" class="section active">
+            <h3>Users</h3>
+
+            <input type="text" id="userSearch" placeholder="Search user..." />
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Role</th>
+                        <th>ID</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="userTable"></tbody>
+            </table>
+
+            <div id="userPagination"></div>
+        </div>
+
+        <!-- BANK -->
+        <div id="banks" class="section">
+            <h3>Bank Details</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>ID</th>
+                        <th>Bank</th>
+                        <th>Account</th>
+                    </tr>
+                </thead>
+                <tbody id="bankTable"></tbody>
+            </table>
+        </div>
+
+        <!-- BETS -->
+        <div id="bets" class="section">
+            <h3>Bets</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>ID</th>
+                        <th>Match</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="betTable"></tbody>
+            </table>
+        </div>
+
+        <!-- DEPOSITS -->
+        <div id="deposits" class="section">
+            <h3>Deposits</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>ID</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="depositTable"></tbody>
+            </table>
+        </div>
+
+        <!-- WITHDRAW -->
+        <div id="withdraw" class="section">
+            <h3>Withdrawals</h3>
+
+            <select id="withdrawFilter">
+                <option value="">All</option>
+                <option value="PENDING">Pending</option>
+                <option value="APPROVED">Approved</option>
+            </select>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Bank</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="withdrawTable"></tbody>
+            </table>
+        </div>
+
+        <!-- SPORTS -->
+        <div id="sports" class="section">
+            <h3>Sports Control</h3>
+            <div id="sportsControls"></div>
+        </div>
+
     </div>
 
-    <script src="agent.js"></script>
+    <script>
+        document.querySelectorAll(".tab").forEach(btn => {
+            btn.onclick = () => {
+
+                document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+                document.getElementById(btn.dataset.tab).classList.add("active");
+            };
+        });
+    </script>
+
+    <script src="admin.js"></script>
+
 </body>
 
 </html>
