@@ -56,6 +56,22 @@
             color: #00e5ff;
         }
 
+        .cards {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #111;
+            padding: 15px;
+            border-radius: 8px;
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #222;
+        }
+
         /* TABLE */
         table {
             width: 100%;
@@ -135,6 +151,7 @@
         <h2>⚙️ Admin</h2>
 
         <div class="menu">
+            <button class="tab" data-tab="dashboard">Dashboard</button>
             <button class="tab active" data-tab="users">Users</button>
             <button class="tab" data-tab="banks">Bank</button>
             <button class="tab" data-tab="bets">Bets</button>
@@ -146,6 +163,37 @@
 
     <!-- MAIN -->
     <div class="main">
+
+        <div id="dashboard" class="section active">
+
+            <h3>📊 Dashboard</h3>
+
+            <div class="cards">
+
+                <div class="card">Users: <span id="totalUsers">0</span></div>
+                <div class="card">Bets Today: <span id="totalBets">0</span></div>
+                <div class="card">Deposits: <span id="totalDeposits">0</span></div>
+                <div class="card">Withdrawals: <span id="totalWithdrawals">0</span></div>
+                <div class="card">Profit: ₹<span id="totalProfit">0</span></div>
+
+            </div>
+
+            <h3>⚡ Live Bets</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Match</th>
+                        <th>Team</th>
+                        <th>Amount</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="liveBets"></tbody>
+            </table>
+
+        </div>
 
         <!-- USERS -->
         <div id="users" class="section active">
