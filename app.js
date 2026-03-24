@@ -53,8 +53,17 @@ function isBettingOpen(match) {
 
 function getCountdown(startTime) {
     const now = new Date();
+
+    // 🔥 FIX: force proper parsing
     const start = new Date(startTime);
-    const diff = start - now;
+
+    if (isNaN(start)) return "--";
+
+    const diff = start.getTime() - now.getTime();
+
+    // 🚨 Ignore unrealistic values (main fix)
+    if (diff > 72 * 3600000) return ""; // hide 3+ day matches
+    if (diff < -24 * 3600000) return "";
 
     if (diff <= 0) return "LIVE";
 
@@ -505,23 +514,25 @@ function renderMatches() {
     });
 
     const filtered = uniqueMatches
-        .filter(m => (m.sport || "").toLowerCase() === currentSport.toLowerCase())
-        .filter(m => {
+    .filter(m => (m.sport || "").toLowerCase() === currentSport.toLowerCase())
+    .filter(m => {
 
-            const now = new Date();
-            const start = new Date(m.startTime);
+        const now = new Date();
+        const start = new Date(m.startTime);
+        const diff = start - now;
 
-            if (currentFilter === "live") {
-                return m.status === "live";
-            }
+        if (currentFilter === "live") {
+            return m.status === "live";
+        }
 
-            if (currentFilter === "upcoming") {
-                return start > now;
-            }
+        if (currentFilter === "upcoming") {
+            return diff > 0 && diff <= 72 * 3600000;
+        }
 
-            return true; // All
-        });
-
+        // ✅ FIXED ALL TAB
+        return diff > -24 * 3600000 && diff <= 72 * 3600000;
+    });
+    
     if (!filtered.length) {
         list.innerHTML = `<div class="no-data">No matches available</div>`;
         return;
