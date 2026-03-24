@@ -54,6 +54,9 @@ function isBettingOpen(match) {
 function getCountdown(startTime) {
     const now = new Date();
     const start = new Date(startTime);
+
+    if (isNaN(start)) return "--";
+
     const diff = start - now;
 
     if (diff <= 0) return "LIVE";
