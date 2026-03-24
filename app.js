@@ -52,11 +52,18 @@ function isBettingOpen(match) {
 }
 
 function getCountdown(startTime) {
-    const now = new Date();
-    const start = new Date(startTime);
+
+    let start;
+
+    if (typeof startTime === "string" && !startTime.includes("T")) {
+        start = new Date(startTime + "T15:00:00");
+    } else {
+        start = new Date(startTime);
+    }
 
     if (isNaN(start)) return "--";
 
+    const now = new Date();
     const diff = start - now;
 
     if (diff <= 0) return "LIVE";
@@ -508,22 +515,35 @@ function renderMatches() {
     });
 
     const filtered = uniqueMatches
-        .filter(m => (m.sport || "").toLowerCase() === currentSport.toLowerCase())
-        .filter(m => {
+    .filter(m => (m.sport || "").toLowerCase() === currentSport.toLowerCase())
+    .filter(m => {
 
-            const now = new Date();
-            const start = new Date(m.startTime);
+        const now = new Date();
 
-            if (currentFilter === "live") {
-                return m.status === "live";
-            }
+        // 🔥 SAFE TIME PARSE
+        let start;
 
-            if (currentFilter === "upcoming") {
-                return start > now;
-            }
+        if (typeof m.startTime === "string" && !m.startTime.includes("T")) {
+            start = new Date(m.startTime + "T15:00:00");
+        } else {
+            start = new Date(m.startTime);
+        }
 
-            return true; // All
-        });
+        if (isNaN(start)) return false;
+
+        const diff = start - now;
+
+        if (currentFilter === "live") {
+            return m.status === "live";
+        }
+
+        if (currentFilter === "upcoming") {
+            return diff > 0 && diff <= 72 * 3600000;
+        }
+
+        // ✅ ALL TAB
+        return diff > -2 * 3600000 && diff <= 72 * 3600000;
+    });
 
     if (!filtered.length) {
         list.innerHTML = `<div class="no-data">No matches available</div>`;
