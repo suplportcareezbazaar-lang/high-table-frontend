@@ -42,57 +42,57 @@ let currentFilter = "all";
 /* ================= HELPERS ================= */
 
 function isBettingOpen(match) {
-    const now = new Date();
-    const start = new Date(match.startTime);
+  const now = new Date();
+  const start = new Date(match.startTime);
 
-    // close betting 30 minutes before start
-    const closeTime = new Date(start.getTime() - 30 * 60 * 1000);
+  // close betting 30 minutes before start
+  const closeTime = new Date(start.getTime() - 30 * 60 * 1000);
 
-    return now < closeTime;
+  return now < closeTime;
 }
 
 function getCountdown(startTime) {
 
-    let start;
+  let start;
 
-    if (typeof startTime === "string" && !startTime.includes("T")) {
-        start = new Date(startTime + "T15:00:00");
-    } else {
-        start = new Date(startTime);
-    }
+  if (typeof startTime === "string" && !startTime.includes("T")) {
+    start = new Date(startTime + "T15:00:00");
+  } else {
+    start = new Date(startTime);
+  }
 
-    if (isNaN(start)) return "--";
+  if (isNaN(start)) return "--";
 
-    const now = new Date();
-    const diff = start - now;
+  const now = new Date();
+  const diff = start - now;
 
-    if (diff <= 0) return "LIVE";
+  if (diff <= 0) return "LIVE";
 
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
 
-    return `${h}h ${m}m ${s}s`;
+  return `${h}h ${m}m ${s}s`;
 }
 
 function getAuthToken() {
-    return (
-        localStorage.getItem("userToken") ||
-        localStorage.getItem("adminToken") ||
-        localStorage.getItem("agentToken")
-    );
+  return (
+    localStorage.getItem("userToken") ||
+    localStorage.getItem("adminToken") ||
+    localStorage.getItem("agentToken")
+  );
 }
 
 function toggleMenu() {
-    const menu = document.getElementById("mobileMenu");
-    const overlay = document.getElementById("menuOverlay");
+  const menu = document.getElementById("mobileMenu");
+  const overlay = document.getElementById("menuOverlay");
 
-    menu.classList.toggle("active");
-    overlay.classList.toggle("active");
+  menu.classList.toggle("active");
+  overlay.classList.toggle("active");
 }
 
 function showLoading() {
-    matchList.innerHTML = `
+  matchList.innerHTML = `
         <div style="padding:30px;text-align:center;opacity:0.7">
             ⏳ Loading matches…
         </div>
@@ -101,8 +101,8 @@ function showLoading() {
 
 /* ================== UI HELPERS ================== */
 function showError(message) {
-    if (!matchList) return;
-    matchList.innerHTML = `
+  if (!matchList) return;
+  matchList.innerHTML = `
         <div style="padding:20px;color:#ffcc00;text-align:center;font-weight:600">
             ⚠️ ${message}
         </div>
@@ -110,31 +110,31 @@ function showError(message) {
 }
 
 function getInitials(name = "") {
-    return name
-        .split(" ")
-        .map(w => w[0])
-        .join("")
-        .substring(0, 2)
-        .toUpperCase();
+  return name
+    .split(" ")
+    .map(w => w[0])
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
 }
 
 function formatMatchTime(dateStr) {
-    const d = new Date(dateStr);
-    return d.toLocaleString(undefined, {
-        day: "2-digit",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit"
-    });
+  const d = new Date(dateStr);
+  return d.toLocaleString(undefined, {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
 }
 
 /* ================== MODALS ================== */
 function openModal(id) {
-    document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
-    document.getElementById(id)?.classList.add("active");
+  document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
+  document.getElementById(id)?.classList.add("active");
 }
 function closeModal(id) {
-    document.getElementById(id)?.classList.remove("active");
+  document.getElementById(id)?.classList.remove("active");
 }
 
 /* ================== AUTH ================== */
@@ -143,430 +143,416 @@ registerBtn.onclick = () => openModal("registerModal");
 logoutBtn.onclick = logout;
 
 walletBtn.onclick = () => {
-    if (!localStorage.getItem("userToken")) {
-        alert("Please login first");
-        return;
-    }
-    openModal("walletModal");
-    loadWallet();
+  if (!localStorage.getItem("userToken")) {
+    alert("Please login first");
+    return;
+  }
+  openModal("walletModal");
+  loadWallet();
 };
 
 historyBtn.onclick = () => {
-    openModal("historyModal");
-    loadWalletHistory();
+  openModal("historyModal");
+  loadWalletHistory();
 };
 
 async function register() {
-    const username = regUser.value.trim();
-    const email = regEmail.value.trim();
-    const mobile = regMobile.value.trim();
-    const password = regPass.value;
-    const password2 = regPass2.value;
+  const username = regUser.value.trim();
+  const email = regEmail.value.trim();
+  const mobile = regMobile.value.trim();
+  const password = regPass.value;
+  const password2 = regPass2.value;
 
-    if (!username || !email || !mobile || !password) {
-        alert("All fields are required");
-        return;
-    }
+  if (!username || !email || !mobile || !password) {
+    alert("All fields are required");
+    return;
+  }
 
-    if (password !== password2) {
-        alert("Passwords do not match");
-        return;
-    }
+  if (password !== password2) {
+    alert("Passwords do not match");
+    return;
+  }
 
-    const res = await fetch(`${API}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username,
-            email,
-            mobile,
-            password
-        })
-    });
+  const res = await fetch(`${API}/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      username,
+      email,
+      mobile,
+      password
+    })
+  });
 
-    const data = await res.json();
-    if (data.error) return alert(data.error);
+  const data = await res.json();
+  if (data.error) return alert(data.error);
 
-    localStorage.setItem("userId", data.userId);
+  localStorage.setItem("userId", data.userId);
 
-    alert(`Registered successfully!\nYour User ID: ${data.userId}`);
-    closeModal("registerModal");
+  alert(`Registered successfully!\nYour User ID: ${data.userId}`);
+  closeModal("registerModal");
 }
 
 async function login() {
-    const username = loginUser.value.trim();
-    const password = loginPass.value;
+  const username = loginUser.value.trim();
+  const password = loginPass.value;
 
-    const res = await fetch(`${API}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-    });
+  const res = await fetch(`${API}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+  });
 
-    const data = await res.json();
-    if (data.error) return alert(data.error);
+  const data = await res.json();
+  if (data.error) return alert(data.error);
 
-    const payload = JSON.parse(atob(data.token.split(".")[1]));
+  const payload = JSON.parse(atob(data.token.split(".")[1]));
 
-    localStorage.setItem("userId", payload.id);
+  localStorage.setItem("userId", payload.id);
 
-    if (payload.role === "admin") {
-        localStorage.setItem("adminToken", data.token);
-        location.href = "admin.html";
-        return;
-    }
+  if (payload.role === "admin") {
+    localStorage.setItem("adminToken", data.token);
+    location.href = "admin.html";
+    return;
+  }
 
-    if (payload.role === "agent") {
-        localStorage.setItem("agentToken", data.token);
-        location.href = "agent.html";
-        return;
-    }
+  if (payload.role === "agent") {
+    localStorage.setItem("agentToken", data.token);
+    location.href = "agent.html";
+    return;
+  }
 
-    localStorage.setItem("userToken", data.token);
-    closeModal("loginModal");
-    updateAuthUI();
+  localStorage.setItem("userToken", data.token);
+  closeModal("loginModal");
+  updateAuthUI();
 }
 
 async function requestPasswordReset() {
-    const email = forgotEmail.value.trim();
-    if (!email) return alert("Enter your email");
+  const email = forgotEmail.value.trim();
+  if (!email) return alert("Enter your email");
 
-    const res = await fetch(`${API}/password/forgot`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-    });
+  const res = await fetch(`${API}/password/forgot`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  });
 
-    const data = await res.json();
-    if (data.error) return alert(data.error);
+  const data = await res.json();
+  if (data.error) return alert(data.error);
 
-    alert("Password reset link sent to your email");
-    closeModal("forgotModal");
+  alert("Password reset link sent to your email");
+  closeModal("forgotModal");
 }
 
 function logout() {
-    localStorage.clear();
-    updateAuthUI();
+  localStorage.clear();
+  updateAuthUI();
 }
 
 function updateAuthUI() {
-    const token = localStorage.getItem("userToken");
-    const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("userToken");
+  const userId = localStorage.getItem("userId");
 
-    loginBtn.classList.toggle("hidden", !!token);
-    registerBtn.classList.toggle("hidden", !!token);
-    logoutBtn.classList.toggle("hidden", !token);
-    walletBtn.classList.toggle("hidden", !token);
-    historyBtn.classList.toggle("hidden", !token);
+  loginBtn.classList.toggle("hidden", !!token);
+  registerBtn.classList.toggle("hidden", !!token);
+  logoutBtn.classList.toggle("hidden", !token);
+  walletBtn.classList.toggle("hidden", !token);
+  historyBtn.classList.toggle("hidden", !token);
 
-    // MOBILE
-    document.getElementById("mLogin").classList.toggle("hidden", !!token);
-    document.getElementById("mRegister").classList.toggle("hidden", !!token);
-    document.getElementById("mLogout").classList.toggle("hidden", !token);
-    document.getElementById("mWallet").classList.toggle("hidden", !token);
-    document.getElementById("mHistory").classList.toggle("hidden", !token);
+  // MOBILE
+  document.getElementById("mLogin").classList.toggle("hidden", !!token);
+  document.getElementById("mRegister").classList.toggle("hidden", !!token);
+  document.getElementById("mLogout").classList.toggle("hidden", !token);
+  document.getElementById("mWallet").classList.toggle("hidden", !token);
+  document.getElementById("mHistory").classList.toggle("hidden", !token);
 
-    const userIdLabel = document.getElementById("userIdLabel");
-    const userIdText = document.getElementById("userIdText");
+  const userIdLabel = document.getElementById("userIdLabel");
+  const userIdText = document.getElementById("userIdText");
 
-    if (token && userId) {
-        userIdText.innerText = userId;
-        userIdLabel.classList.remove("hidden");
-    } else {
-        userIdLabel.classList.add("hidden");
-    }
+  if (token && userId) {
+    userIdText.innerText = userId;
+    userIdLabel.classList.remove("hidden");
+  } else {
+    userIdLabel.classList.add("hidden");
+  }
 }
 
 /* ================== WALLET ================== */
 
 async function loadWallet() {
-    const token = getAuthToken();
-    if (!token) return;
+  const token = getAuthToken();
+  if (!token) return;
 
-    try {
-        const res = await fetch(`${API}/wallet`, {
-            headers: { Authorization: "Bearer " + token }
-        });
+  try {
+    const res = await fetch(`${API}/wallet`, {
+      headers: { Authorization: "Bearer " + token }
+    });
 
-        const data = await res.json();
-        if (data.error) {
-            alert(data.error);
-            return;
-        }
-
-        document.getElementById("walletUserId").innerText =
-            localStorage.getItem("userId") || "-";
-
-
-        document.getElementById("tokenBalance").innerText =
-            Number(data.balance || 0).toFixed(2);
-
-        await checkBankStatus();
-    } catch (err) {
-        alert("Failed to load wallet");
-        console.error(err);
+    const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+      return;
     }
+
+    document.getElementById("walletUserId").innerText =
+      localStorage.getItem("userId") || "-";
+
+
+    document.getElementById("tokenBalance").innerText =
+      Number(data.balance || 0).toFixed(2);
+
+    await checkBankStatus();
+  } catch (err) {
+    alert("Failed to load wallet");
+    console.error(err);
+  }
 }
 
 async function buyTokens(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const input = document.getElementById("add-amount");
-    if (!input) {
-        console.error("add-amount input missing");
-        return;
-    }
+  const input = document.getElementById("add-amount");
+  if (!input) {
+    console.error("add-amount input missing");
+    return;
+  }
 
-    const amount = Number(input.value);
-    if (!amount || amount < 100) {
-        alert("Minimum deposit is 100");
-        return;
-    }
+  const amount = Number(input.value);
+  if (!amount || amount < 100) {
+    alert("Minimum deposit is 100");
+    return;
+  }
 
-    const token = localStorage.getItem("userToken");
+  const token = localStorage.getItem("userToken");
 
-    const res = await fetch(`${API}/deposit/init`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token
-        },
-        body: JSON.stringify({ amount })
-    });
+  const res = await fetch(`${API}/deposit/init`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({ amount })
+  });
 
-    const data = await res.json();
-    console.log("DEPOSIT RESPONSE:", data);
+  const data = await res.json();
+  console.log("DEPOSIT RESPONSE:", data);
 
-    if (data.payment_url) {
-        // Redirect to IMB checkout
-        window.location.href = data.payment_url;
-    } else {
-        alert("Payment URL not returned");
-    }
+  if (data.payment_url) {
+    // Redirect to IMB checkout
+    window.location.href = data.payment_url;
+  } else {
+    alert("Payment URL not returned");
+  }
 }
 
 async function withdrawTokens() {
-    const amount = Number(withdrawAmount.value);
-    const password = withdrawPassword.value;
+  const amount = Number(withdrawAmount.value);
+  const password = withdrawPassword.value;
 
-    if (amount < 500) return alert("Minimum withdrawal is 500");
-    if (!password) return alert("Enter login password");
+  if (amount < 500) return alert("Minimum withdrawal is 500");
+  if (!password) return alert("Enter login password");
 
-    const btn = event.target;
-    btn.disabled = true;
-    btn.innerText = "Submitting...";
+  const btn = event.target;
+  btn.disabled = true;
+  btn.innerText = "Submitting...";
 
-    try {
-        const token = localStorage.getItem("userToken");
+  try {
+    const token = localStorage.getItem("userToken");
 
-        const res = await fetch(`${API}/wallet/withdraw`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + token
-            },
-            body: JSON.stringify({ amount, password })
-        });
+    const res = await fetch(`${API}/wallet/withdraw`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+      body: JSON.stringify({ amount, password })
+    });
 
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
 
-        alert("Withdrawal requested (processing up to 24h)");
-        withdrawAmount.value = "";
-        withdrawPassword.value = "";
+    alert("Withdrawal requested (processing up to 24h)");
+    withdrawAmount.value = "";
+    withdrawPassword.value = "";
 
-        loadWallet();
-    } catch (err) {
-        alert(err.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerText = "Convert & Withdraw";
-    }
+    loadWallet();
+  } catch (err) {
+    alert(err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerText = "Convert & Withdraw";
+  }
 }
 
 async function saveBank() {
-    const token = localStorage.getItem("userToken");
+  const token = localStorage.getItem("userToken");
 
-    const body = {
-        holder: accHolder.value,
-        number: accNumber.value,
-        bankName: bankName.value,
-        mobile: bankMobile.value,
-        email: bankEmail.value,
-        code: bankCode.value
-    };
+  const body = {
+    holder: accHolder.value,
+    number: accNumber.value,
+    bankName: bankName.value,
+    mobile: bankMobile.value,
+    email: bankEmail.value,
+    code: bankCode.value
+  };
 
-    const res = await fetch(`${API}/bank/save`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token
-        },
-        body: JSON.stringify(body)
-    });
+  const res = await fetch(`${API}/bank/save`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify(body)
+  });
 
-    const data = await res.json();
-    if (data.error) return alert(data.error);
+  const data = await res.json();
+  if (data.error) return alert(data.error);
 
-    alert("Bank details saved");
-    checkBankStatus();
+  alert("Bank details saved");
+  checkBankStatus();
 }
 
 async function checkBankStatus() {
-    const token = localStorage.getItem("userToken");
+  const token = localStorage.getItem("userToken");
 
-    const res = await fetch(`${API}/bank/status`, {
-        headers: { Authorization: "Bearer " + token }
-    });
+  const res = await fetch(`${API}/bank/status`, {
+    headers: { Authorization: "Bearer " + token }
+  });
 
-    const data = await res.json();
-    const el = document.getElementById("bankStatus");
+  const data = await res.json();
+  const el = document.getElementById("bankStatus");
 
-    if (data.linked) {
-        el.innerText = "Linked";
-        el.classList.remove("not-linked");
-        el.classList.add("linked");
-    } else {
-        el.innerText = "Not Linked";
-        el.classList.remove("linked");
-        el.classList.add("not-linked");
-    }
+  if (data.linked) {
+    el.innerText = "Linked";
+    el.classList.remove("not-linked");
+    el.classList.add("linked");
+  } else {
+    el.innerText = "Not Linked";
+    el.classList.remove("linked");
+    el.classList.add("not-linked");
+  }
 }
 
 function renderTeamLogo(teamName, logoUrl) {
-    if (logoUrl) {
-        return `<img src="${logoUrl}" alt="${teamName}" class="team-logo-img">`;
-    }
-    return `<div class="team-logo">${getInitials(teamName)}</div>`;
+  if (logoUrl) {
+    return `<img src="${logoUrl}" alt="${teamName}" class="team-logo-img">`;
+  }
+  return `<div class="team-logo">${getInitials(teamName)}</div>`;
 }
 
 /* ================== MATCH FILTER UI ================== */
 document.querySelectorAll(".sport").forEach(btn => {
-    btn.onclick = () => {
-        document.querySelectorAll(".sport").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentSport = btn.dataset.sport;
-        renderMatches();
-    };
+  btn.onclick = () => {
+    document.querySelectorAll(".sport").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentSport = btn.dataset.sport;
+    renderMatches();
+  };
 });
 
 document.querySelectorAll(".tab").forEach(tab => {
-    tab.onclick = () => {
-        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-        tab.classList.add("active");
-        currentFilter = tab.dataset.filter;
-        renderMatches();
-    };
+  tab.onclick = () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    currentFilter = tab.dataset.filter;
+    renderMatches();
+  };
 });
 
 /* ================== LOAD MATCHES ================== */
 async function loadMatches(retry = 0) {
-    showLoading();
+  showLoading();
 
-    try {
-        const res = await fetch(`${API}/matches`);
-        const data = await res.json();
+  try {
+    const res = await fetch(`${API}/matches`);
+    const data = await res.json();
 
-        if (!Array.isArray(data)) {
-            showError("Invalid server response");
-            return;
-        }
-
-        matches = data
-            .map(m => ({
-                ...m,
-                startTime: m.startTime || new Date().toISOString()
-             }))
-             .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-
-        if (!matches.length && retry < 5) {
-            console.log("No matches yet, retrying...");
-            setTimeout(() => loadMatches(retry + 1), 2000);
-            return;
-        }
-
-        console.log("Loaded matches:", matches.length);
-        renderMatches();
-
-    } catch (err) {
-        console.error("Fetch failed:", err);
-        showError("Unable to load matches.");
+    if (!Array.isArray(data)) {
+      showError("Invalid server response");
+      return;
     }
+
+    matches = data
+      .map(m => ({
+        ...m,
+        startTime: m.startTime || new Date().toISOString()
+      }))
+      .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+
+    if (!matches.length && retry < 5) {
+      console.log("No matches yet, retrying...");
+      setTimeout(() => loadMatches(retry + 1), 2000);
+      return;
+    }
+
+    console.log("Loaded matches:", matches.length);
+    renderMatches();
+
+  } catch (err) {
+    console.error("Fetch failed:", err);
+    showError("Unable to load matches.");
+  }
 }
 
 function renderMatches() {
-    const list = document.getElementById("matchList");
-    list.innerHTML = "";
+  const list = document.getElementById("matchList");
+  list.innerHTML = "";
 
-    if (!Array.isArray(matches) || !matches.length) {
-        list.innerHTML = `<div class="no-data">No matches available</div>`;
-        return;
+  if (!Array.isArray(matches) || !matches.length) {
+    list.innerHTML = `<div class="no-data">No matches available</div>`;
+    return;
+  }
+
+  // ✅ Remove duplicates by match.id
+  const uniqueMatches = [];
+  const seenIds = new Set();
+
+  matches.forEach(m => {
+    if (m?.id && !seenIds.has(m.id)) {
+      seenIds.add(m.id);
+      uniqueMatches.push(m);
     }
+  });
 
-    // ✅ Remove duplicates by match.id
-    const uniqueMatches = [];
-    const seenIds = new Set();
-
-    matches.forEach(m => {
-        if (m?.id && !seenIds.has(m.id)) {
-            seenIds.add(m.id);
-            uniqueMatches.push(m);
-        }
-    });
-
-    const filtered = uniqueMatches
+  const filtered = uniqueMatches
     .filter(m => (m.sport || "").toLowerCase() === currentSport.toLowerCase())
     .filter(m => {
 
-        const now = new Date();
+      // ✅ Always trust backend status (IMPORTANT)
 
-        // 🔥 SAFE TIME PARSE
-        let start;
+      if (currentFilter === "live") {
+        return m.status === "live";
+      }
 
-        if (typeof m.startTime === "string" && !m.startTime.includes("T")) {
-            start = new Date(m.startTime + "T15:00:00");
-        } else {
-            start = new Date(m.startTime);
-        }
+      if (currentFilter === "upcoming") {
+        return m.status === "upcoming";
+      }
 
-        if (isNaN(start)) return false;
-
-        const diff = start - now;
-
-        if (currentFilter === "live") {
-            return m.status === "live";
-        }
-
-        if (currentFilter === "upcoming") {
-            return diff > 0 && diff <= 72 * 3600000;
-        }
-
-        // ✅ ALL TAB
-        return diff > -2 * 3600000 && diff <= 72 * 3600000;
+      // ✅ ALL TAB → show both
+      return m.status === "live" || m.status === "upcoming";
     });
+  if (!filtered.length) {
+    list.innerHTML = `<div class="no-data">No matches available</div>`;
+    return;
+  }
 
-    if (!filtered.length) {
-        list.innerHTML = `<div class="no-data">No matches available</div>`;
-        return;
+  filtered.forEach(match => {
+
+    const isLive = match.status === "live";
+    const timerText = isLive
+      ? "LIVE"
+      : getCountdown(match.startTime);
+
+    const card = document.createElement("div");
+    card.className = "match-card";
+
+    if (!isBettingOpen(match)) {
+      card.classList.add("closed");
     }
 
-    filtered.forEach(match => {
+    card.matchData = match;
 
-        const isLive = match.status === "live";
-        const timerText = isLive
-            ? "LIVE"
-            : getCountdown(match.startTime);
-
-        const card = document.createElement("div");
-        card.className = "match-card";
-
-        if (!isBettingOpen(match)) {
-            card.classList.add("closed");
-        }
-
-        card.matchData = match;
-
-        card.innerHTML = `
+    card.innerHTML = `
             <div class="match-header">
                 <span class="league">${match.league || "Match"}</span>
             </div>
@@ -593,43 +579,43 @@ function renderMatches() {
             </div>
         `;
 
-        card.onclick = () => openBetModal(match);
+    card.onclick = () => openBetModal(match);
 
-        list.appendChild(card);
-    });
+    list.appendChild(card);
+  });
 }
 
 function renderMatchesFiltered(keyword) {
-    const list = document.getElementById("matchList");
-    list.innerHTML = "";
+  const list = document.getElementById("matchList");
+  list.innerHTML = "";
 
-    const filtered = matches.filter(m =>
-        m.team1.toLowerCase().includes(keyword) ||
-        m.team2.toLowerCase().includes(keyword) ||
-        (m.league && m.league.toLowerCase().includes(keyword))
-    );
+  const filtered = matches.filter(m =>
+    m.team1.toLowerCase().includes(keyword) ||
+    m.team2.toLowerCase().includes(keyword) ||
+    (m.league && m.league.toLowerCase().includes(keyword))
+  );
 
-    if (!filtered.length) {
-        list.innerHTML = `<div class="no-data">No matches found</div>`;
-        return;
+  if (!filtered.length) {
+    list.innerHTML = `<div class="no-data">No matches found</div>`;
+    return;
+  }
+
+  filtered.forEach(match => {
+    const isLive = match.status === "live";
+    const timerText = isLive
+      ? "LIVE"
+      : getCountdown(match.startTime);
+
+    const card = document.createElement("div");
+    card.className = "match-card";
+
+    if (!isBettingOpen(match)) {
+      card.classList.add("closed");
     }
 
-    filtered.forEach(match => {
-        const isLive = match.status === "live";
-        const timerText = isLive
-            ? "LIVE"
-            : getCountdown(match.startTime);
+    card.matchData = match;
 
-        const card = document.createElement("div");
-        card.className = "match-card";
-
-        if (!isBettingOpen(match)) {
-            card.classList.add("closed");
-        }
-
-        card.matchData = match;
-
-        card.innerHTML = `
+    card.innerHTML = `
             <div class="match-header">
                 <span class="league">${match.league || "Match"}</span>
             </div>
@@ -656,10 +642,10 @@ function renderMatchesFiltered(keyword) {
             </div>
         `;
 
-        card.onclick = () => openBetModal(match);
+    card.onclick = () => openBetModal(match);
 
-        list.appendChild(card);
-    });
+    list.appendChild(card);
+  });
 }
 
 /* ================== BET POPUP ================== */
@@ -693,142 +679,142 @@ teamBBox.onclick = () => selectTeam("B");
 betAmount.oninput = updateBetPreview;
 
 function selectTeam(team) {
-    selectedTeam = team;
-    teamABox.classList.toggle("active", team === "A");
-    teamBBox.classList.toggle("active", team === "B");
-    updateBetPreview();
+  selectedTeam = team;
+  teamABox.classList.toggle("active", team === "A");
+  teamBBox.classList.toggle("active", team === "B");
+  updateBetPreview();
 }
 
 function updateBetPreview() {
-    const total = Number(betAmount.value) || 0;
-    const main = total * 0.75;
-    const hedge = total * 0.25;
+  const total = Number(betAmount.value) || 0;
+  const main = total * 0.75;
+  const hedge = total * 0.25;
 
-    mainBetText.innerText = main.toFixed(2);
-    hedgeBetText.innerText = hedge.toFixed(2);
-    potentialWinText.innerText = (main * 2).toFixed(2);
-    hedgeReturnText.innerText = (hedge * 2).toFixed(2);
+  mainBetText.innerText = main.toFixed(2);
+  hedgeBetText.innerText = hedge.toFixed(2);
+  potentialWinText.innerText = (main * 2).toFixed(2);
+  hedgeReturnText.innerText = (hedge * 2).toFixed(2);
 }
 
 function openBetModal(match) {
-    //console.log("🎯 openBetModal called", match);
+  //console.log("🎯 openBetModal called", match);
 
-    if (!match || !match.id) return;
+  if (!match || !match.id) return;
 
-    if (!localStorage.getItem("userToken")) {
-        alert("Please login to place bet");
-        return;
-    }
+  if (!localStorage.getItem("userToken")) {
+    alert("Please login to place bet");
+    return;
+  }
 
-    if (!isBettingOpen(match)) {
-        alert("Betting closed for this match");
-        return;
-    }
+  if (!isBettingOpen(match)) {
+    alert("Betting closed for this match");
+    return;
+  }
 
-    selectedMatch = match;
-    selectedTeam = null;
+  selectedMatch = match;
+  selectedTeam = null;
 
-    betMatchTitle.innerText = `${match.team1} vs ${match.team2}`;
-    teamAName.innerText = match.team1;
-    teamBName.innerText = match.team2;
+  betMatchTitle.innerText = `${match.team1} vs ${match.team2}`;
+  teamAName.innerText = match.team1;
+  teamBName.innerText = match.team2;
 
-    teamABox.classList.remove("active");
-    teamBBox.classList.remove("active");
-    betAmount.value = "";
+  teamABox.classList.remove("active");
+  teamBBox.classList.remove("active");
+  betAmount.value = "";
 
-    updateBetPreview();
-    openModal("BetModal");
+  updateBetPreview();
+  openModal("BetModal");
 }
 
 /* ================== PLACE BET ================== */
 placeBetBtn.onclick = async () => {
-    if (!selectedMatch || !selectedMatch.id)
-        return alert("Invalid match");
+  if (!selectedMatch || !selectedMatch.id)
+    return alert("Invalid match");
 
-    if (!selectedTeam)
-        return alert("Select a team");
+  if (!selectedTeam)
+    return alert("Select a team");
 
-    const amount = Number(betAmount.value);
-    if (amount < 20)
-        return alert("Minimum bet is 20");
+  const amount = Number(betAmount.value);
+  if (amount < 20)
+    return alert("Minimum bet is 20");
 
-    placeBetBtn.disabled = true;
-    placeBetBtn.innerText = "Placing...";
+  placeBetBtn.disabled = true;
+  placeBetBtn.innerText = "Placing...";
 
-    try {
-        const res = await fetch(`${API}/bet/place`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("userToken")
-            },
-            body: JSON.stringify({
-                matchId: selectedMatch.id,
-                matchName: `${selectedMatch.team1} vs ${selectedMatch.team2}`,
-                team: selectedTeam === "A"
-                    ? selectedMatch.team1
-                    : selectedMatch.team2,
-                amount
-            })
-        });
-
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-
-        alert("Bet placed successfully");
-        closeModal("BetModal");
-
-    } catch (err) {
-        alert(err.message);
-    } finally {
-        placeBetBtn.disabled = false;
-        placeBetBtn.innerText = "Place Bet";
-    }
-};
-
-walletHistoryTab.onclick = () => {
-    walletHistoryTab.classList.add("active");
-    betHistoryTab.classList.remove("active");
-    walletHistory.classList.remove("hidden");
-    betHistory.classList.add("hidden");
-    loadWalletHistory();
-};
-
-betHistoryTab.onclick = () => {
-    betHistoryTab.classList.add("active");
-    walletHistoryTab.classList.remove("active");
-    betHistory.classList.remove("hidden");
-    walletHistory.classList.add("hidden");
-    loadBetHistory();
-};
-
-profitTab.onclick = () => {
-    profitTab.classList.add("active");
-    walletHistoryTab.classList.remove("active");
-    betHistoryTab.classList.remove("active");
-
-    walletHistory.classList.add("hidden");
-    betHistory.classList.add("hidden");
-
-    loadProfitLoss();
-};
-
-async function loadWalletHistory() {
-    const token = getAuthToken();
-    if (!token) return;
-
-    if (!historyContent) {
-        console.error("historyContent element missing");
-        return;
-    }
-
-    const res = await fetch(`${API}/wallet/history`, {
-        headers: { Authorization: "Bearer " + token }
+  try {
+    const res = await fetch(`${API}/bet/place`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("userToken")
+      },
+      body: JSON.stringify({
+        matchId: selectedMatch.id,
+        matchName: `${selectedMatch.team1} vs ${selectedMatch.team2}`,
+        team: selectedTeam === "A"
+          ? selectedMatch.team1
+          : selectedMatch.team2,
+        amount
+      })
     });
 
     const data = await res.json();
+    if (data.error) throw new Error(data.error);
 
-    historyContent.innerHTML = `
+    alert("Bet placed successfully");
+    closeModal("BetModal");
+
+  } catch (err) {
+    alert(err.message);
+  } finally {
+    placeBetBtn.disabled = false;
+    placeBetBtn.innerText = "Place Bet";
+  }
+};
+
+walletHistoryTab.onclick = () => {
+  walletHistoryTab.classList.add("active");
+  betHistoryTab.classList.remove("active");
+  walletHistory.classList.remove("hidden");
+  betHistory.classList.add("hidden");
+  loadWalletHistory();
+};
+
+betHistoryTab.onclick = () => {
+  betHistoryTab.classList.add("active");
+  walletHistoryTab.classList.remove("active");
+  betHistory.classList.remove("hidden");
+  walletHistory.classList.add("hidden");
+  loadBetHistory();
+};
+
+profitTab.onclick = () => {
+  profitTab.classList.add("active");
+  walletHistoryTab.classList.remove("active");
+  betHistoryTab.classList.remove("active");
+
+  walletHistory.classList.add("hidden");
+  betHistory.classList.add("hidden");
+
+  loadProfitLoss();
+};
+
+async function loadWalletHistory() {
+  const token = getAuthToken();
+  if (!token) return;
+
+  if (!historyContent) {
+    console.error("historyContent element missing");
+    return;
+  }
+
+  const res = await fetch(`${API}/wallet/history`, {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  const data = await res.json();
+
+  historyContent.innerHTML = `
         <table>
             <tr>
                 <th>Type</th>
@@ -849,21 +835,21 @@ async function loadWalletHistory() {
 }
 
 async function loadBetHistory() {
-    const token = getAuthToken();
-    if (!token) return;
+  const token = getAuthToken();
+  if (!token) return;
 
-    if (!historyContent) {
-        console.error("historyContent element missing");
-        return;
-    }
+  if (!historyContent) {
+    console.error("historyContent element missing");
+    return;
+  }
 
-    const res = await fetch(`${API}/bet/history`, {
-        headers: { Authorization: "Bearer " + token }
-    });
+  const res = await fetch(`${API}/bet/history`, {
+    headers: { Authorization: "Bearer " + token }
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    historyContent.innerHTML = `
+  historyContent.innerHTML = `
         <table>
             <tr>
                 <th>Match</th>
@@ -881,13 +867,13 @@ async function loadBetHistory() {
                     <td>${b.amount}</td>
                     <td style="color:
                         ${b.result === "won" ? "lime" :
-                          b.result === "lost" ? "red" : "orange"}">
+      b.result === "lost" ? "red" : "orange"}">
                         ${b.result ? b.result.toUpperCase() : "PENDING"}
                     </td>
                     <td>
                         ${b.settledAt
-                            ? new Date(b.settledAt).toLocaleString()
-                            : "-"}
+      ? new Date(b.settledAt).toLocaleString()
+      : "-"}
                     </td>
                 </tr>
             `).join("")}
@@ -896,29 +882,29 @@ async function loadBetHistory() {
 }
 
 async function loadProfitLoss() {
-    const token = getAuthToken();
-    if (!token) return;
+  const token = getAuthToken();
+  if (!token) return;
 
-    if (!historyContent) {
-        console.error("historyContent element missing");
-        return;
+  if (!historyContent) {
+    console.error("historyContent element missing");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/profit-loss`, {
+      headers: { Authorization: "Bearer " + token }
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+      historyContent.innerHTML = "Failed to load data";
+      return;
     }
 
-    try {
-        const res = await fetch(`${API}/profit-loss`, {
-            headers: { Authorization: "Bearer " + token }
-        });
+    const profitColor = data.profit >= 0 ? "lime" : "red";
 
-        const data = await res.json();
-
-        if (data.error) {
-            historyContent.innerHTML = "Failed to load data";
-            return;
-        }
-
-        const profitColor = data.profit >= 0 ? "lime" : "red";
-
-        historyContent.innerHTML = `
+    historyContent.innerHTML = `
             <div style="padding:20px;text-align:center">
 
                 <h3>📊 Last 30 Days</h3>
@@ -954,78 +940,78 @@ async function loadProfitLoss() {
             </div>
         `;
 
-    } catch (err) {
-        console.error("Profit API error:", err);
-        historyContent.innerHTML = "Failed to load profit data";
-    }
+  } catch (err) {
+    console.error("Profit API error:", err);
+    historyContent.innerHTML = "Failed to load profit data";
+  }
 }
 
 setInterval(() => {
-    document.querySelectorAll(".match-card").forEach(card => {
-        const match = card.matchData;
-        if (!match) return;
+  document.querySelectorAll(".match-card").forEach(card => {
+    const match = card.matchData;
+    if (!match) return;
 
-        const timerEl = card._timerEl || (card._timerEl = card.querySelector(".timer"));
-        if (!timerEl) return;
+    const timerEl = card._timerEl || (card._timerEl = card.querySelector(".timer"));
+    if (!timerEl) return;
 
-        const now = new Date();
-        const start = new Date(match.startTime);
+    const now = new Date();
+    const start = new Date(match.startTime);
 
-        if (start <= now) {
-            timerEl.innerText = "LIVE";
-            timerEl.classList.add("live");
-        } else {
-            timerEl.innerText = getCountdown(match.startTime);
-        }
-    });
+    if (start <= now) {
+      timerEl.innerText = "LIVE";
+      timerEl.classList.add("live");
+    } else {
+      timerEl.innerText = getCountdown(match.startTime);
+    }
+  });
 }, 1000);
 
 /* ================== INIT ================== */
 document.addEventListener("DOMContentLoaded", () => {
 
-    updateAuthUI();
-    loadMatches();
-    setInterval(loadMatches, 60000);
+  updateAuthUI();
+  loadMatches();
+  setInterval(loadMatches, 60000);
 
-    /* ===== SEARCH SETUP (DESKTOP + MOBILE) ===== */
+  /* ===== SEARCH SETUP (DESKTOP + MOBILE) ===== */
 
-    const searchBtn = document.getElementById("searchBtn");
-    const searchBtnMobile = document.getElementById("searchBtnMobile");
-    const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+  const searchBtnMobile = document.getElementById("searchBtnMobile");
+  const searchInput = document.getElementById("searchInput");
 
-    if (searchBtn) {
-        searchBtn.onclick = () => {
-            searchInput.classList.toggle("hidden");
-            searchInput.focus();
-        };
-    }
+  if (searchBtn) {
+    searchBtn.onclick = () => {
+      searchInput.classList.toggle("hidden");
+      searchInput.focus();
+    };
+  }
 
-    if (searchBtnMobile) {
-        searchBtnMobile.onclick = () => {
-            searchInput.classList.toggle("hidden");
-            searchInput.focus();
-        };
-    }
+  if (searchBtnMobile) {
+    searchBtnMobile.onclick = () => {
+      searchInput.classList.toggle("hidden");
+      searchInput.focus();
+    };
+  }
 
-    if (searchInput) {
-        searchInput.oninput = function () {
-            const keyword = this.value.toLowerCase();
-            renderMatchesFiltered(keyword);
-        };
-    }
+  if (searchInput) {
+    searchInput.oninput = function () {
+      const keyword = this.value.toLowerCase();
+      renderMatchesFiltered(keyword);
+    };
+  }
 
-    // 🔥 Handle payment return safely
-    const urlParams = new URLSearchParams(window.location.search);
+  // 🔥 Handle payment return safely
+  const urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.get("payment") === "success") {
+  if (urlParams.get("payment") === "success") {
 
-        // Remove query from URL (so alert doesn't repeat)
-        window.history.replaceState({}, document.title, window.location.pathname);
+    // Remove query from URL (so alert doesn't repeat)
+    window.history.replaceState({}, document.title, window.location.pathname);
 
-        alert("Payment completed successfully!");
+    alert("Payment completed successfully!");
 
-        // Open wallet & refresh balance
-        openModal("walletModal");
-        loadWallet();
-    }
+    // Open wallet & refresh balance
+    openModal("walletModal");
+    loadWallet();
+  }
 });
