@@ -4,6 +4,19 @@ const token = localStorage.getItem("adminToken");
 if (!token) {
   alert("Admin login required");
   location.href = "index.html";
+} else {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+
+    if (payload.role !== "admin") {
+      alert("Access denied");
+      localStorage.clear();
+      location.href = "index.html";
+    }
+  } catch {
+    localStorage.clear();
+    location.href = "index.html";
+  }
 }
 
 /* ================= AUTH ================= */
