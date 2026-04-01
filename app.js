@@ -36,7 +36,7 @@ document.getElementById("mLogout").onclick = () => logoutBtn.click();
 let matches = [];
 let selectedMatch = null;
 let selectedTeam = null;
-let currentSport = "cricket";
+let currentSport = "basketball";
 let currentFilter = "all";
 
 /* ================= HELPERS ================= */
