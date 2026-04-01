@@ -559,14 +559,14 @@ function renderMatches() {
 
             <div class="match-body">
                 <div class="team">
-                    ${renderTeamLogo(match.team1, match.team1Flag)}
+                    ${renderTeamLogo(match.team1, match.team1Logo)}
                     <div class="team-name">${match.team1}</div>
                 </div>
 
                 <div class="vs">VS</div>
 
                 <div class="team">
-                    ${renderTeamLogo(match.team2, match.team2Flag)}
+                    ${renderTeamLogo(match.team2, match.team2Logo)}
                     <div class="team-name">${match.team2}</div>
                 </div>
             </div>
@@ -622,14 +622,14 @@ function renderMatchesFiltered(keyword) {
 
             <div class="match-body">
                 <div class="team">
-                    ${renderTeamLogo(match.team1, match.team1Flag)}
+                    ${renderTeamLogo(match.team1, match.team1Logo)}
                     <div class="team-name">${match.team1}</div>
                 </div>
 
                 <div class="vs">VS</div>
 
                 <div class="team">
-                    ${renderTeamLogo(match.team2, match.team2Flag)}
+                    ${renderTeamLogo(match.team2, match.team2Logo)}
                     <div class="team-name">${match.team2}</div>
                 </div>
             </div>
