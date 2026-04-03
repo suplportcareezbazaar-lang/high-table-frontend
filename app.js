@@ -227,47 +227,82 @@ async function login() {
   updateAuthUI();
 }
 
-async function requestPasswordReset() {
-  const email = forgotEmail.value.trim();
-  if (!email) return alert("Enter your email");
+function initForgotPassword() {
+    const forgotModal = $("forgotModal");
+    const resetModal = $("resetModal");
 
-  const res = await fetch(`${API}/password/forgot`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email })
-  });
+    // SEND RESET LINK
+    $("forgotSubmit")?.addEventListener("click", async () => {
+        const email = $("forgotEmail").value.trim();
+        if (!email) return toast("Email required");
 
-  const data = await res.json();
-  if (data.error) return alert(data.error);
+        try {
+            const res = await fetch(`${API_BASE}/api/forgot-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
+            });
 
-  alert("Password reset link sent to your email");
-  closeModal("forgotModal");
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Request failed");
+
+            toast("Reset link sent to your email");
+            hide(forgotModal);     // ✅ ONLY close forgot modal
+            // ❌ DO NOT open reset modal here
+
+        } catch (err) {
+            toast(err.message);
+        }
+    });
+
+    // RESET PASSWORD
+    $("resetSubmit")?.addEventListener("click", async () => {
+        const token = $("resetToken").value.trim();
+        const newPassword = $("resetPassword").value.trim();
+
+        if (!token || !newPassword) {
+            return toast("All fields required");
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/api/reset-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token, newPassword })
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Reset failed");
+
+            saveToken(data.token);
+            saveUser(data.user);
+
+            toast("Password updated & logged in");
+            hide(resetModal);
+            onLogin();
+
+            // clean URL
+            window.history.replaceState({}, document.title, "/");
+
+        } catch (err) {
+            toast(err.message);
+        }
+    });
 }
 
-async function resetPassword() {
-  const token = document.getElementById("resetToken").value;
-  const newPassword = document.getElementById("resetPassword").value;
+document.addEventListener("DOMContentLoaded", () => {
+    const token = getQueryParam("token");
 
-  if (!token || !newPassword) {
-    alert("All fields required");
-    return;
-  }
+    if (token) {
+        const resetModal = $("resetModal");
+        const resetTokenInput = $("resetToken");
 
-  const res = await fetch(`${API}/password/reset`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ token, newPassword })
-  });
-
-  const data = await res.json();
-
-  if (data.error) return alert(data.error);
-
-  alert("Password updated successfully");
-  closeModal("resetModal");
-}
+        if (resetModal && resetTokenInput) {
+            resetTokenInput.value = token;
+            show(resetModal);
+        }
+    }
+});
 
 function getQueryParam(name) {
   const url = new URL(window.location.href);
@@ -1002,15 +1037,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateAuthUI();
   loadMatches();
   setInterval(loadMatches, 60000);
-
-  const token = getQueryParam("token");
-
-  if (token) {
-    openModal("resetModal");
-
-    const input = document.getElementById("resetToken");
-    if (input) input.value = token;
-  }
 
   /* ===== SEARCH SETUP (DESKTOP + MOBILE) ===== */
 
