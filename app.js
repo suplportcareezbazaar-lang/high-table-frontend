@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (resetModal && resetTokenInput) {
             resetTokenInput.value = token;
-            show(resetModal);
+            openModal("resetModal");
         }
     }
 });
