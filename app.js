@@ -1020,20 +1020,6 @@ setInterval(() => {
 /* ================== INIT ================== */
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ✅ INIT FORGOT PASSWORD
-  initForgotPassword();
-
-  const token = getQueryParam("token");
-  if (token) {
-    const resetModal = $("resetModal");
-    const resetTokenInput = $("resetToken");
-
-    if (resetModal && resetTokenInput) {
-      resetTokenInput.value = token;
-      openModal("resetModal");
-    }
-  }
-
   updateAuthUI();
   loadMatches();
   setInterval(loadMatches, 60000);
