@@ -166,18 +166,40 @@
         </div>
     </div>
 
-    <div id="forgotModal" class="modal">
-        <div class="modal-box">
-            <h3>Forgot Password</h3>
+    <!-- FORGOT PASSWORD MODAL -->
+    <div id="forgotModal" class="dark-modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" data-close="forgotModal">×</span>
 
-            <input type="email" id="forgotEmail" placeholder="Registered Email" required />
+            <h2 class="modal-title">Forgot Password</h2>
 
-            <button onclick="requestPasswordReset()">Send Reset Link</button>
+            <div class="input-box">
+                <input id="forgotEmail" type="email" placeholder=" " />
+                <label>Registered Email</label>
+            </div>
 
-            <p style="margin-top:10px;font-size:13px;">
-                Remember password?
-                <span class="link" onclick="openModal('loginModal')">Login</span>
-            </p>
+            <button id="forgotSubmit" class="btn neon full">Send Reset Link</button>
+        </div>
+    </div>
+
+    <!-- RESET PASSWORD MODAL -->
+    <div id="resetModal" class="dark-modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" data-close="resetModal">×</span>
+
+            <h2 class="modal-title">Reset Password</h2>
+
+            <div class="input-box">
+                <input id="resetToken" placeholder=" " />
+                <label>Reset Token</label>
+            </div>
+
+            <div class="input-box">
+                <input id="resetPassword" type="password" placeholder=" " />
+                <label>New Password</label>
+            </div>
+
+            <button id="resetSubmit" class="btn neon full">Update Password</button>
         </div>
     </div>
 
