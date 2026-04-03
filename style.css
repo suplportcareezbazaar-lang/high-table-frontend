@@ -917,3 +917,70 @@ button:active {
     margin-right: 10px;
     opacity: 0.9;
 }
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #1a2335;
+    color: white;
+    cursor: pointer;
+    transition: 0.25s ease;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background: #22324d;
+}
+
+.btn.neon {
+    background: var(--accent);
+    color: black;
+    font-weight: bold;
+}
+
+.btn.neon:hover {
+    box-shadow: 0 0 16px var(--accent);
+}
+
+.btn.ghost {
+    background: transparent;
+    border: 2px solid var(--accent);
+}
+
+.neon-border:hover {
+    box-shadow: 0 0 14px var(--accent);
+}
+
+.forgot-link {
+    color: var(--accent);
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.reset-container {
+    max-width: 400px;
+    margin: 120px auto;
+    background: #0f172a;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.reset-container input {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+}
