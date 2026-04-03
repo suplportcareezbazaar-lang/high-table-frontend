@@ -935,9 +935,11 @@ button:active {
 }
 
 .btn.neon {
-    background: var(--accent);
-    color: black;
-    font-weight: bold;
+    width: 100%;
+    padding: 8px;
+    background: #fb4646;
+    border: none;
+    cursor: pointer;
 }
 
 .btn.neon:hover {
