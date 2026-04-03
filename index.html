@@ -178,7 +178,9 @@
                 <label>Registered Email</label>
             </div>
 
-            <button id="forgotSubmit" class="btn neon full">Send Reset Link</button>
+            <button onclick="requestPasswordReset()" class="btn neon full">
+              Send Reset Link
+            </button>
         </div>
     </div>
 
@@ -190,7 +192,7 @@
             <h2 class="modal-title">Reset Password</h2>
 
             <div class="input-box">
-                <input id="resetToken" placeholder=" " />
+                <input id="resetToken" type="hidden" />
                 <label>Reset Token</label>
             </div>
 
@@ -199,7 +201,9 @@
                 <label>New Password</label>
             </div>
 
-            <button id="resetSubmit" class="btn neon full">Update Password</button>
+            <button onclick="resetPassword()" class="btn neon full">
+              Update Password
+            </button>
         </div>
     </div>
 
