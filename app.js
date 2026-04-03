@@ -244,6 +244,36 @@ async function requestPasswordReset() {
   closeModal("forgotModal");
 }
 
+async function resetPassword() {
+  const token = document.getElementById("resetToken").value;
+  const newPassword = document.getElementById("resetPassword").value;
+
+  if (!token || !newPassword) {
+    alert("All fields required");
+    return;
+  }
+
+  const res = await fetch(`${API}/password/reset`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ token, newPassword })
+  });
+
+  const data = await res.json();
+
+  if (data.error) return alert(data.error);
+
+  alert("Password updated successfully");
+  closeModal("resetModal");
+}
+
+function getQueryParam(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
+}
+
 function logout() {
   localStorage.clear();
   updateAuthUI();
@@ -972,6 +1002,15 @@ document.addEventListener("DOMContentLoaded", () => {
   updateAuthUI();
   loadMatches();
   setInterval(loadMatches, 60000);
+
+  const token = getQueryParam("token");
+
+  if (token) {
+    openModal("resetModal");
+
+    const input = document.getElementById("resetToken");
+    if (input) input.value = token;
+  }
 
   /* ===== SEARCH SETUP (DESKTOP + MOBILE) ===== */
 
