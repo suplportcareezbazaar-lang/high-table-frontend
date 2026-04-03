@@ -290,20 +290,6 @@ function initForgotPassword() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const token = getQueryParam("token");
-
-    if (token) {
-        const resetModal = $("resetModal");
-        const resetTokenInput = $("resetToken");
-
-        if (resetModal && resetTokenInput) {
-            resetTokenInput.value = token;
-            openModal("resetModal");
-        }
-    }
-});
-
 function getQueryParam(name) {
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
@@ -1033,6 +1019,20 @@ setInterval(() => {
 
 /* ================== INIT ================== */
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ✅ INIT FORGOT PASSWORD
+  initForgotPassword();
+
+  const token = getQueryParam("token");
+  if (token) {
+    const resetModal = $("resetModal");
+    const resetTokenInput = $("resetToken");
+
+    if (resetModal && resetTokenInput) {
+      resetTokenInput.value = token;
+      openModal("resetModal");
+    }
+  }
 
   updateAuthUI();
   loadMatches();
