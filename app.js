@@ -232,8 +232,6 @@ async function login() {
 }
 
 function initForgotPassword() {
-    const forgotModal = $("forgotModal");
-    const resetModal = $("resetModal");
 
     // SEND RESET LINK
     $("forgotSubmit")?.addEventListener("click", async () => {
@@ -250,16 +248,18 @@ function initForgotPassword() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Request failed");
 
-           alert("Reset link sent to your email");
-           closeModal("forgotModal");
+            alert("Reset link sent to your email");
+            closeModal("forgotModal");
 
         } catch (err) {
             alert(err.message);
         }
     });
 
+
     // RESET PASSWORD
     $("resetSubmit")?.addEventListener("click", async () => {
+
         const token = $("resetToken").value.trim();
         const newPassword = $("resetPassword").value.trim();
 
@@ -277,12 +277,13 @@ function initForgotPassword() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Reset failed");
 
-            saveToken(data.token);
-            saveUser(data.user);
+            // ✅ FIXED: no auto login
+            alert("Password updated successfully");
 
-            alert("Password updated & logged in");
             closeModal("resetModal");
-            onLogin();
+
+            // optional → open login modal
+            openModal("loginModal");
 
             // clean URL
             window.history.replaceState({}, document.title, "/");
