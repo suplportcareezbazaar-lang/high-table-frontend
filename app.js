@@ -83,6 +83,10 @@ function getAuthToken() {
   );
 }
 
+function $(id) {
+  return document.getElementById(id);
+}
+
 function toggleMenu() {
   const menu = document.getElementById("mobileMenu");
   const overlay = document.getElementById("menuOverlay");
@@ -234,7 +238,7 @@ function initForgotPassword() {
     // SEND RESET LINK
     $("forgotSubmit")?.addEventListener("click", async () => {
         const email = $("forgotEmail").value.trim();
-        if (!email) return toast("Email required");
+        if (!email) return alert("Email required");
 
         try {
             const res = await fetch(`${API_BASE}/api/forgot-password`, {
@@ -246,12 +250,11 @@ function initForgotPassword() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Request failed");
 
-            toast("Reset link sent to your email");
-            hide(forgotModal);     // ✅ ONLY close forgot modal
-            // ❌ DO NOT open reset modal here
+           alert("Reset link sent to your email");
+           closeModal("forgotModal");
 
         } catch (err) {
-            toast(err.message);
+            alert(err.message);
         }
     });
 
@@ -261,7 +264,7 @@ function initForgotPassword() {
         const newPassword = $("resetPassword").value.trim();
 
         if (!token || !newPassword) {
-            return toast("All fields required");
+            return alert("All fields required");
         }
 
         try {
@@ -277,15 +280,15 @@ function initForgotPassword() {
             saveToken(data.token);
             saveUser(data.user);
 
-            toast("Password updated & logged in");
-            hide(resetModal);
+            alert("Password updated & logged in");
+            closeModal("resetModal");
             onLogin();
 
             // clean URL
             window.history.replaceState({}, document.title, "/");
 
         } catch (err) {
-            toast(err.message);
+            alert(err.message);
         }
     });
 }
@@ -1064,5 +1067,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Open wallet & refresh balance
     openModal("walletModal");
     loadWallet();
+  }
+
+  // ✅ INIT FORGOT PASSWORD
+  initForgotPassword();
+
+  const token = getQueryParam("token");
+  if (token) {
+    const resetModal = $("resetModal");
+    const resetTokenInput = $("resetToken");
+
+    if (resetModal && resetTokenInput) {
+      resetTokenInput.value = token;
+      openModal("resetModal");
+    }
   }
 });
