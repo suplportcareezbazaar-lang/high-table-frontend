@@ -36,6 +36,7 @@ body {
 }
 
 .logo {
+    background: #00ffff;
     display: flex;
     align-items: center;
     gap: 8px;
