@@ -1083,4 +1083,7 @@ document.addEventListener("DOMContentLoaded", () => {
       openModal("resetModal");
     }
   }
+
+  // ✅ Clean URL (important)
+  window.history.replaceState({}, document.title, "/");
 });
